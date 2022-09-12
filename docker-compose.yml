@@ -1,0 +1,54 @@
+version: "3"
+services:
+  nginx:
+    image: "nginx"
+    container_name: "shop-nginx"
+    ports:
+      - "9000:80"
+    volumes:
+      - "./config/nginx:/etc/nginx/conf.d"
+      - "./web/dist:/opt/www/static"
+    restart: always
+  sumod:
+    build: ./src
+    container_name: 'shop'
+    ports:
+      - "9001:9501"
+    volumes:
+      - "./src:/opt/www"
+    entrypoint: "php bin/hyperf.php start"
+    restart: always
+  redis:
+    image: redis:latest
+    container_name: 'shop-redis'
+    restart: always
+    volumes:
+      - "./config/redis/redis.conf:/etc/redis/redis.conf"
+      - "./runtime/redis:/data"
+    ports:
+      - "9002:6379"
+    command:
+      - "redis-server"
+      - "/etc/redis/redis.conf"
+  mysql:
+    image: "mysql:8.0"
+    container_name: "shop-mysql"
+    ports:
+      - "9003:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "shop"
+      MYSQL_USER: "shop"
+      MYSQL_PASSWORD: "shop"
+    volumes:
+      - "./config/mysql/my.cnf:/etc/mysql/conf.d/sql_mode.cnf"
+      - "./runtime/mysql:/var/lib/mysql"
+    command: [ "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci" ]
+  phpmyadmin:
+    image: "phpmyadmin:latest"
+    container_name: "shop-phpmyadmin"
+    ports:
+      - "9004:80"
+    environment:
+      PMA_ARBITRARY: 1
+    restart: "always"
