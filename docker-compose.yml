@@ -9,14 +9,14 @@ services:
       - "./config/nginx:/etc/nginx/conf.d"
       - "./web/dist:/opt/www/static"
     restart: always
-  sumod:
+  shop:
     build: ./src
     container_name: 'shop'
     ports:
       - "9001:9501"
     volumes:
       - "./src:/opt/www"
-    entrypoint: "php bin/hyperf.php start"
+    entrypoint: "top"
     restart: always
   redis:
     image: redis:latest

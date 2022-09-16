@@ -11,10 +11,17 @@ declare(strict_types=1);
  */
 namespace App\Controller;
 
+use App\Annotation\ApiRouter;
 use App\Controller\BaseSupport\BaseSupportController;
 
+/**
+ * @ApiRouter(router="index", method="get")
+ */
 class Index extends BaseSupportController
 {
+    /**
+     * @ApiRouter(router="/", method="get", intro="首页")
+     */
     public function index()
     {
         $user = $this->request->input('user', 'Hyperf');
