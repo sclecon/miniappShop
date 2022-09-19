@@ -29,6 +29,7 @@
         "hyperf/process": "~2.2.0",
         "hyperf/redis": "~2.2.0",
         "hyperf/validation": "^2.2",
+        "overtrue/wechat": "~4.0",
         "sclecon/ucentor": "dev-main"
     },
     "require-dev": {
@@ -63,7 +64,10 @@
     "prefer-stable": true,
     "config": {
         "optimize-autoloader": true,
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "easywechat-composer/easywechat-composer": true
+        }
     },
     "extra": [],
     "scripts": {
