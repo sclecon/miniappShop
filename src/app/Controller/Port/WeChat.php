@@ -11,7 +11,7 @@ use App\Controller\BaseSupport\BaseSupportController;
 class WeChat extends BaseSupportController
 {
     /**
-     * @ApiRouter(router="server", method="get|post|put", intro="服务接口")
+     * @ApiRouter(router="server", method={"get", "post", "put"}, intro="服务接口")
      */
     public function server(){
         $response = \App\Utils\WeChat::app()->server->serve();

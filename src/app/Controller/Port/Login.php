@@ -27,7 +27,7 @@ class Login extends BaseSupportController
     }
 
     /**
-     * @ApiRouter(router="index", method="get|post", intro="执行登录请求")
+     * @ApiRouter(router="index", method={"get", "post", "put"}, intro="执行登录请求")
      */
     public function index(){
         $user = WeChat::app()->oauth->user();
