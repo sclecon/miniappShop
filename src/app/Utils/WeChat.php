@@ -20,8 +20,8 @@ class WeChat
 
     protected static function config() : array {
         return [
-            'app_id' => 'wx3cf0f39249eb0exx',
-            'secret' => 'f1c242f4f28f735d4687abb469072axx',
+            'app_id' => 'wxd4573d78c8dd5ee9',
+            'secret' => 'd0dc1a655a739b8ad5880af868221cfa',
             'response_type' =>  'array',
         ];
     }
