@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS `config` (
     PRIMARY KEY (`config_id`)
 ) comment='配置表';
 
+ALTER TABLE `config` ADD `system` INT(1) NOT NULL DEFAULT '0' COMMENT '是否系统自带不允许删除' AFTER `value`;
+
 -- create admin
 CREATE TABLE IF NOT EXISTS `admin` (
     `admin_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '管理员ID',
@@ -155,3 +157,18 @@ CREATE TABLE IF NOT EXISTS `shop_banner` (
     `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
     PRIMARY KEY (`banner_id`)
 ) comment='市场轮播图';
+
+-- create banner
+CREATE TABLE IF NOT EXISTS `banner` (
+    `banner_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '轮播图ID',
+    `url` CHAR(255) NOT NULL COMMENT '轮播图地址',
+    `weight` INT(10) DEFAULT 0 COMMENT '轮播图权重',
+    `created_time` INT(10) DEFAULT NULL COMMENT '创建时间',
+    `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
+    `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
+    PRIMARY KEY (`banner_id`)
+) comment='首页轮播图';
+
+ALTER TABLE `painter` ADD `intro` VARCHAR(255) NOT NULL COMMENT '画家简介 个人说明' AFTER `name`;
+
+INSERT INTO `config` (`config_id`, `name`, `intro`, `uuid`, `value`, `system`, `created_time`, `updated_time`, `deleted_time`) VALUES (NULL, '公众号APPID', '微信公众号的APPID', 'wx_appid', 'value', '0', NULL, NULL, NULL);
