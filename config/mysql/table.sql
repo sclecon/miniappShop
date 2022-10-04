@@ -172,3 +172,14 @@ CREATE TABLE IF NOT EXISTS `banner` (
 ALTER TABLE `painter` ADD `intro` VARCHAR(255) NOT NULL COMMENT '画家简介 个人说明' AFTER `name`;
 
 INSERT INTO `config` (`config_id`, `name`, `intro`, `uuid`, `value`, `system`, `created_time`, `updated_time`, `deleted_time`) VALUES (NULL, '公众号APPID', '微信公众号的APPID', 'wx_appid', 'value', '0', NULL, NULL, NULL);
+
+-- create banner
+CREATE TABLE IF NOT EXISTS `announcement` (
+    `announcement_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '公告ID',
+    `title` VARCHAR(255) NOT NULL COMMENT '公告标题',
+    `message` VARCHAR(255) DEFAULT NULL COMMENT '公告内容',
+    `created_time` INT(10) DEFAULT NULL COMMENT '创建时间',
+    `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
+    `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
+    PRIMARY KEY (`announcement_id`)
+) comment='公告数据表';

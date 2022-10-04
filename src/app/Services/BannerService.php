@@ -13,7 +13,7 @@ class BannerService extends BaseSupportService
         return $this->getModel()
             ->select(['url'])
             ->orderByDesc('weight')
-            ->get()
+            ->pluck('url')
             ->toArray();
     }
 }

@@ -15,6 +15,6 @@ class WeChat extends BaseSupportController
      */
     public function server(){
         $response = \App\Utils\WeChat::app()->server->serve();
-        return $response->send();
+        return $response->getContent();
     }
 }
