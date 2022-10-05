@@ -4,16 +4,16 @@ namespace App\Controller\Admin;
 
 use App\Annotation\ApiRouter;
 use App\Controller\Admin\Base\BaseCurd;
-use App\Model\BannerModel;
+use App\Model\AuctionModel;
 
 /**
- * @ApiRouter(router="admin/announcement", method="get", intro="公告管理")
+ * @ApiRouter(router="admin/auction", method="get", intro="拍品管理")
  */
-class Announcement extends BaseCurd
+class Auction extends BaseCurd
 {
     public function __construct()
     {
-        $this->model = new BannerModel();
+        $this->model = new AuctionModel();
         parent::__construct();
     }
 }
