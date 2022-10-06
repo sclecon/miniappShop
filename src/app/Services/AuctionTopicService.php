@@ -55,6 +55,7 @@ class AuctionTopicService extends BaseSupportService
         $value['start_time_str'] = date('Y-m-d H:i:s', $value['start_time']);
         $value['end_time_str'] = date('Y-m-d H:i:s', $value['end_time']);
         $value['status_str'] = $this->getStatusStr($value['status']);
+        $value['auction_count'] = AuctionTopicAccessService::instance()->getAuctionCountByTopicId((int) $value['topic_id']);
         return $value;
     }
 

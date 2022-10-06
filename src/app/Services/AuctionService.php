@@ -31,7 +31,7 @@ class AuctionService extends BaseSupportService
         return $list;
     }
 
-    public function list(int $page, int $number, int $status, int $topicId, int $gallery) : array {
+    public function list(int $page, int $number, int $status, int $topicId, int $gallery, string $orderBy) : array {
         $model = $this->getModel()
             ->forPage($page, $number)
             ->select(['auction_id', 'painter_id', 'name', 'intro', 'start_price', 'start_time', 'end_time', 'status', 'buy_now_price'])
@@ -46,7 +46,7 @@ class AuctionService extends BaseSupportService
                 $this->getModel()->getTableKey('status'),
                 $this->getModel()->getTableKey('buy_now_price')
             ])
-            ->orderByDesc('auction_id');
+            ->orderByDesc($this->getModel()->getTableKey($orderBy));
         if (in_array($status, [0, 1, 2, 3])){
             $model = $model->where($this->getModel()->getTableKey('status'), $status);
         }

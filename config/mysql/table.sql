@@ -134,6 +134,7 @@ CREATE TABLE IF NOT EXISTS `auction_topic` (
     `end_time` INT(10) NOT NULL COMMENT '拍卖结束时间',
     `status` INT(1) DEFAULT 0 COMMENT '拍卖状态 0=等待拍卖 1=拍卖中 2=已结束',
     `view` INT(10) DEFAULT 0 COMMENT '围观人数',
+    `sign_up_number` INT(10) DEFAULT 0 COMMENT '报名人数',
     `join_number` INT(10) DEFAULT 0 COMMENT '出价次数',
     `boutique` INT(1) DEFAULT 0 COMMENT '是否精品',
     `created_time` INT(10) DEFAULT NULL COMMENT '创建时间',
