@@ -38,4 +38,13 @@ class AuctionTopic extends BaseSupportController
             'list'  =>  AuctionTopicService::instance()->list($page, $number, $status),
         ]);
     }
+
+    /**
+     * @ApiRouter(router="detail", method="get", intro="获取拍场详情")
+     * @Validator(attribute="topic_id", required=true, rule="integer", intro="拍场ID")
+     */
+    public function detail(){
+        $topicId = (int) $this->request->input('topic_id');
+        return $this->success('获取详情成功', AuctionTopicService::instance()->detail($topicId));
+    }
 }

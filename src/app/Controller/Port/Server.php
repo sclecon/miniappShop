@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Controller\Port;
+
+use App\Annotation\ApiRouter;
+use App\Controller\BaseSupport\BaseSupportController;
+use App\Services\ConfigService;
+
+/**
+ * @ApiRouter(router="port/server", method="get", intro="系统相关")
+ */
+class Server extends BaseSupportController
+{
+    /**
+     * @ApiRouter(router="notice", method="get", intro="获取系统须知")
+     */
+    public function notice(){
+        return $this->success('获取须知成功', [
+            'message'   =>  ConfigService::instance()->getNotice()
+        ]);
+    }
+}

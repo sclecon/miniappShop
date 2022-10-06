@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Exception\Service\AuctionServiceException;
 use App\Model\AuctionModel;
+use App\Model\AuctionTopicAccessModel;
 use App\Services\BaseSupport\BaseSupportService;
 use App\Utils\ArrayExpand;
 
@@ -29,14 +31,32 @@ class AuctionService extends BaseSupportService
         return $list;
     }
 
-    public function list(int $page, int $number, int $status) : array {
+    public function list(int $page, int $number, int $status, int $topicId, int $gallery) : array {
         $model = $this->getModel()
-            ->where('boutique', '>', 0)
             ->forPage($page, $number)
             ->select(['auction_id', 'painter_id', 'name', 'intro', 'start_price', 'start_time', 'end_time', 'status', 'buy_now_price'])
+            ->select([
+                $this->getModel()->getTableKey('auction_id'),
+                $this->getModel()->getTableKey('painter_id'),
+                $this->getModel()->getTableKey('name'),
+                $this->getModel()->getTableKey('intro'),
+                $this->getModel()->getTableKey('start_price'),
+                $this->getModel()->getTableKey('start_time'),
+                $this->getModel()->getTableKey('end_time'),
+                $this->getModel()->getTableKey('status'),
+                $this->getModel()->getTableKey('buy_now_price')
+            ])
             ->orderByDesc('auction_id');
         if (in_array($status, [0, 1, 2, 3])){
-            $model = $model->where('status', $status);
+            $model = $model->where($this->getModel()->getTableKey('status'), $status);
+        }
+        if ($topicId > 0){
+            $access = AuctionTopicAccessService::instance()->getModel();
+            $model = $model->join($access->getTable(), $this->getModel()->getTableKey('auction_id'), '=', $access->getTableKey('auction_id'));
+            $model = $model->where($access->getTableKey('topic_id'), $topicId);
+        }
+        if ($gallery > 0){
+            $model = $model->where($this->getModel()->getTableKey('gallery'), '>', 0);
         }
         $list = $model->get()->toArray();
         $painterId = array_unique(array_values(ArrayExpand::columnKey($list, 'auction_id', 'painter_id')));
@@ -47,6 +67,20 @@ class AuctionService extends BaseSupportService
             $list[$key] = $this->format($value, $painterNames, $images);
         }
         return $list;
+    }
+
+    public function detail(int $auctionId){
+        $detail = $this->getModel()
+            ->where('auction_id', $auctionId)
+            ->first()
+            ->toArray();
+        if (!$detail){
+            throw new AuctionServiceException('拍品不存在', 404);
+        }
+        $painterId = [$auctionId];
+        $painterNames = PainterService::instance()->getPainterNamesInId($painterId);
+        $images = AuctionImageService::instance()->getAuctionImagesInAuctionId($painterId);
+        return $this->format($detail, $painterNames, $images);
     }
 
     public function getStatusStr($s) : string {

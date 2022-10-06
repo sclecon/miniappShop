@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exception\Service\AuctionTopicServiceException;
 use App\Model\AuctionTopicModel;
 use App\Services\BaseSupport\BaseSupportService;
 
@@ -19,10 +20,7 @@ class AuctionTopicService extends BaseSupportService
             ->get()
             ->toArray();
         foreach ($list as $key => $value){
-            $value['start_time_str'] = date('Y-m-d H:i:s', $value['start_time']);
-            $value['end_time_str'] = date('Y-m-d H:i:s', $value['end_time']);
-            $value['status_str'] = $this->getStatusStr($value['status']);
-            $list[$key] = $value;
+            $list[$key] = $this->format($value);
         }
         return $list;
     }
@@ -37,15 +35,30 @@ class AuctionTopicService extends BaseSupportService
         }
         $list = $model->get()->toArray();
         foreach ($list as $key => $value){
-            $value['start_time_str'] = date('Y-m-d H:i:s', $value['start_time']);
-            $value['end_time_str'] = date('Y-m-d H:i:s', $value['end_time']);
-            $value['status_str'] = $this->getStatusStr($value['status']);
-            $list[$key] = $value;
+            $list[$key] = $this->format($value);
         }
         return $list;
     }
 
-    public function getStatusStr($s) : string {
+    public function detail(int $topicId){
+        $detail = $this->getModel()
+            ->where('topic_id', $topicId)
+            ->first()
+            ->toArray();
+        if (!$detail){
+            throw new AuctionTopicServiceException('拍场不存在', 404);
+        }
+        return $this->format($detail);
+    }
+
+    protected function format(array $value) : array {
+        $value['start_time_str'] = date('Y-m-d H:i:s', $value['start_time']);
+        $value['end_time_str'] = date('Y-m-d H:i:s', $value['end_time']);
+        $value['status_str'] = $this->getStatusStr($value['status']);
+        return $value;
+    }
+
+    protected function getStatusStr($s) : string {
         $status = [0=>'等待拍卖', 1=>'拍卖中', 2=>'拍卖成功'];
         return isset($status[$s]) ? $status[$s] : '未知状态';
     }

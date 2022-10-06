@@ -30,13 +30,26 @@ class Auction extends BaseSupportController
      * @Validator(attribute="page", required=false, rule="integer", intro="分页")
      * @Validator(attribute="number", required=false, rule="integer", intro="显示数量")
      * @Validator(attribute="status", required=false, rule="integer", intro="拍卖状态 0=等待拍卖 1=拍卖中 2=拍卖结束")
+     * @Validator(attribute="topic_id", required=false, rule="integer", intro="拍场ID")
+     * @Validator(attribute="gallery", required=false, rule="integer", intro="是否画廊")
      */
     public function list(){
         $page = (int) $this->request->input('page', 1);
         $number = (int) $this->request->input('number', 50);
         $status = (int) $this->request->input('status', -1);
+        $topicId = (int) $this->request->input('topic_id', -1);
+        $gallery = (int) $this->request->input('gallery', -1);
         return $this->success('获取列表成功', [
-            'list'  =>  AuctionService::instance()->list($page, $number, $status),
+            'list'  =>  AuctionService::instance()->list($page, $number, $status, $topicId, $gallery),
         ]);
+    }
+
+    /**
+     * @ApiRouter(router="detail", method="get", intro="获取拍品详情")
+     * @Validator(attribute="auction_id", required=true, rule="integer", intro="拍品ID")
+     */
+    public function detail(){
+        $auctionId = (int) $this->request->input('auction_id');
+        return $this->success('获取详情成功', AuctionService::instance()->detail($auctionId));
     }
 }
