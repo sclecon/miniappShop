@@ -38,4 +38,8 @@ class UserService extends BaseSupportService
     public function getUserSign(array $userInfo) : string {
         return PortUser::instance()->encode($userInfo);
     }
+
+    public function getUserInfoByUserId(int $userId) : array {
+        return $this->getModel()->where('user_id', $userId)->first()->toArray();
+    }
 }

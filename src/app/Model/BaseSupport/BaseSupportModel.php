@@ -12,7 +12,7 @@ class BaseSupportModel extends Model
     /**
      * @var string
      */
-    const CREATED_AT = 'create_time';
+    const CREATED_AT = 'created_time';
 
     const UPDATED_AT = null;
 
@@ -24,7 +24,7 @@ class BaseSupportModel extends Model
     /**
      * @var string[]
      */
-    protected $casts = ['create_time'=>'timestamp'];
+    protected $casts = ['created_time'=>'timestamp'];
 
     /**
      * @var string
