@@ -94,6 +94,15 @@ class AuctionService extends BaseSupportService
         $item['status_str'] = $this->getStatusStr($item['status']);
         $item['painter'] = isset($painterNames[$item['painter_id']]) ? $painterNames[$item['painter_id']] : '未知画家';
         $item['images'] = isset($images[$item['auction_id']]) ? $images[$item['auction_id']] : [];
+        if (isset($item['postage'])){
+            $item['postage_str'] = $item['postage'] ? '包邮' : '不包邮';
+        }
+        if (isset($item['commission'])){
+            $item['commission_str'] = $item['postage'].'%';
+        }
+        if (isset($item['delay'])){
+            $item['delay_str'] = $item['delay'].'分钟';
+        }
         return $item;
     }
 }
