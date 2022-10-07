@@ -18,10 +18,12 @@ class Auction extends BaseSupportController
      * @Validator(attribute="number", required=false, rule="integer", intro="显示数量")
      */
     public function boutique(){
+        $user = $this->request->getAttribute('user');
+        $userId = $user ? $user['user_id'] : 1;
         $page = (int) $this->request->input('page', 1);
         $number = (int) $this->request->input('number', 50);
         return $this->success('获取精品拍品成功', [
-            'list'  =>  AuctionService::instance()->getBoutique($page, $number),
+            'list'  =>  AuctionService::instance()->getBoutique($page, $number, $userId),
         ]);
     }
 
@@ -35,6 +37,8 @@ class Auction extends BaseSupportController
      * @Validator(attribute="orderby", required=false, rule="string", intro="排序字段")
      */
     public function list(){
+        $user = $this->request->getAttribute('user');
+        $userId = $user ? $user['user_id'] : 1;
         $page = (int) $this->request->input('page', 1);
         $number = (int) $this->request->input('number', 50);
         $status = (int) $this->request->input('status', -1);
@@ -42,7 +46,7 @@ class Auction extends BaseSupportController
         $gallery = (int) $this->request->input('gallery', -1);
         $orderBy = (string) $this->request->input('orderby', 'auction_id');
         return $this->success('获取列表成功', [
-            'list'  =>  AuctionService::instance()->list($page, $number, $status, $topicId, $gallery, $orderBy),
+            'list'  =>  AuctionService::instance()->list($page, $number, $status, $topicId, $gallery, $orderBy, $userId),
         ]);
     }
 
@@ -51,7 +55,9 @@ class Auction extends BaseSupportController
      * @Validator(attribute="auction_id", required=true, rule="integer", intro="拍品ID")
      */
     public function detail(){
+        $user = $this->request->getAttribute('user');
+        $userId = $user ? $user['user_id'] : 1;
         $auctionId = (int) $this->request->input('auction_id');
-        return $this->success('获取详情成功', AuctionService::instance()->detail($auctionId));
+        return $this->success('获取详情成功', AuctionService::instance()->detail($auctionId, $userId));
     }
 }

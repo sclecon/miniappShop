@@ -12,7 +12,7 @@ class AuctionService extends BaseSupportService
 {
     protected $model = AuctionModel::class;
 
-    public function getBoutique(int $page, int $number) : array {
+    public function getBoutique(int $page, int $number, int $userId) : array {
         $list = $this->getModel()
             ->whereIn('status', [0, 1])
             ->where('boutique', '>', 0)
@@ -25,13 +25,14 @@ class AuctionService extends BaseSupportService
         $painterNames = PainterService::instance()->getPainterNamesInId($painterId);
         $painterId = array_keys(ArrayExpand::columns($list, 'auction_id'));
         $images = AuctionImageService::instance()->getAuctionImagesInAuctionId($painterId);
+        $likes = AuctionLikeService::instance()->has($userId, $painterId);
         foreach ($list as $key => $value){
-            $list[$key] = $this->format($value, $painterNames, $images);
+            $list[$key] = $this->format($value, $painterNames, $images, $likes);
         }
         return $list;
     }
 
-    public function list(int $page, int $number, int $status, int $topicId, int $gallery, string $orderBy) : array {
+    public function list(int $page, int $number, int $status, int $topicId, int $gallery, string $orderBy, int $userId) : array {
         $model = $this->getModel()
             ->forPage($page, $number)
             ->select(['auction_id', 'painter_id', 'name', 'intro', 'start_price', 'start_time', 'end_time', 'status', 'buy_now_price'])
@@ -63,13 +64,14 @@ class AuctionService extends BaseSupportService
         $painterNames = PainterService::instance()->getPainterNamesInId($painterId);
         $painterId = array_keys(ArrayExpand::columns($list, 'auction_id'));
         $images = AuctionImageService::instance()->getAuctionImagesInAuctionId($painterId);
+        $likes = AuctionLikeService::instance()->has($userId, $painterId);
         foreach ($list as $key => $value){
-            $list[$key] = $this->format($value, $painterNames, $images);
+            $list[$key] = $this->format($value, $painterNames, $images, $likes);
         }
         return $list;
     }
 
-    public function detail(int $auctionId){
+    public function detail(int $auctionId, int $userId) : array {
         $detail = $this->getModel()
             ->where('auction_id', $auctionId)
             ->first()
@@ -80,7 +82,8 @@ class AuctionService extends BaseSupportService
         $painterId = [$auctionId];
         $painterNames = PainterService::instance()->getPainterNamesInId($painterId);
         $images = AuctionImageService::instance()->getAuctionImagesInAuctionId($painterId);
-        return $this->format($detail, $painterNames, $images);
+        $likes = AuctionLikeService::instance()->has($userId, $painterId);
+        return $this->format($detail, $painterNames, $images, $likes);
     }
 
     public function getStatusStr($s) : string {
@@ -88,7 +91,7 @@ class AuctionService extends BaseSupportService
         return isset($status[$s]) ? $status[$s] : '未知状态';
     }
 
-    protected function format(array $item, array $painterNames, array $images) : array {
+    protected function format(array $item, array $painterNames, array $images, array $likes) : array {
         $item['start_time_str'] = date('Y-m-d H:i:s', time());
         $item['end_time_str'] = date('Y-m-d H:i:s', time());
         $item['status_str'] = $this->getStatusStr($item['status']);
@@ -103,6 +106,7 @@ class AuctionService extends BaseSupportService
         if (isset($item['delay'])){
             $item['delay_str'] = $item['delay'].'分钟';
         }
+        $item['like'] = $likes[$item['auction_id']];
         return $item;
     }
 }

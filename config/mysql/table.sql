@@ -95,6 +95,19 @@ CREATE TABLE IF NOT EXISTS `auction` (
     PRIMARY KEY (`auction_id`)
 ) comment='拍品表';
 
+-- create auction_like
+CREATE TABLE IF NOT EXISTS `auction_like` (
+    `like_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '记录ID',
+    `auction_id` INT(10) NOT NULL COMMENT '拍品ID',
+    `user_id` INT(10) NOT NULL COMMENT '用户UID',
+    `username` VARCHAR(255) NOT NULL COMMENT '用户名',
+    `avatar` CHAR(255) NOT NULL COMMENT '用户头像',
+    `created_time` INT(10) DEFAULT NULL COMMENT '创建时间',
+    `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
+    `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
+    PRIMARY KEY (`like_id`)
+) comment='拍品点赞表';
+
 -- create auction_images
 CREATE TABLE IF NOT EXISTS `auction_images` (
     `images_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '图片ID',
