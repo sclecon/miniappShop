@@ -5,7 +5,7 @@ $config = [
     'dbname'    =>  'shop',
     'username'  =>  'shop',
     'password'  =>  'shop',
-    'port'      =>  '3006',
+    'port'      =>  '3306',
     'charset'   =>  'utf-8'
 ];
 
