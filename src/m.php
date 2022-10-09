@@ -9,9 +9,9 @@ $config = [
     'charset'   =>  'utf-8'
 ];
 
-$conn = mysqli_connect($config['host'], $config['username'], $config['password'], $config['dbname'], $config['3306']);
-if (!$conn){
-    print_r(mysqli_error());
+try {
+    $conn = new PDO('mysql:host='.$config['host'].';dbname='.$config['dbname'].';port='.$config['port'], $config['username'], $config['password']);
+    echo '链接成功';
+} catch (Exception $exception){
+    var_dump($exception->getMessage());
 }
-mysqli_set_charset($conn, $config['charset']);
-var_dump('链接数据库成功');
