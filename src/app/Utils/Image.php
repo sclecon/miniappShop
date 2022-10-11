@@ -12,11 +12,6 @@ class Image
     use StaticInstance;
 
     /**
-     * @var string
-     */
-    protected $root = 'file';
-
-    /**
      * @Inject()
      * @var Filesystem
      */
@@ -27,7 +22,7 @@ class Image
         $filename = $this->getFilename($file, $type);
         $this->filesystem->writeStream($filename, $stream);
         fclose($stream);
-        return '/'.$this->root.'/'.$filename;
+        return '/'.$filename;
     }
 
     protected function getFilename(UploadedFile $file, string $type) : string {
