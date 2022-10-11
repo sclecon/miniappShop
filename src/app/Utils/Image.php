@@ -12,20 +12,26 @@ class Image
     use StaticInstance;
 
     /**
+     * @var string
+     */
+    protected $root = 'file';
+
+    /**
      * @Inject()
      * @var Filesystem
      */
     protected $filesystem;
 
-    public function upload(UploadedFile $file, string $type = 'default') : bool {
+    public function upload(UploadedFile $file, string $type = 'default') : string {
         $stream = fopen($file->getRealPath(), 'r+');
         $filename = $this->getFilename($file, $type);
         $this->filesystem->writeStream($filename, $stream);
-        return fclose($stream);
+        fclose($stream);
+        return '/'.$this->root.'/'.$filename;
     }
 
     protected function getFilename(UploadedFile $file, string $type) : string {
         $filename = md5($file->getFilename()).'.'.$file->getMimeType();
-        return $type.'/'.date('Ym', time()).'/'.date('d', time()).'/'.$filename;
+        return $type.'/'.date('Ym', time()).'/'.date('d', time()).'/'.explode('.', $filename)[0].'.'.explode('/', $filename)[1];
     }
 }
