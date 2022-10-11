@@ -26,7 +26,7 @@ class Banner extends BaseCurd
     public function add(){
         $formData = $this->form->getPostData();
         if (!$formData){
-            return $this->error('插入数据失败，未能获取到有效数据。');
+            // return $this->error('插入数据失败，未能获取到有效数据。');
         }
         $formData['url'] = Image::instance()->upload($this->request->file('image'), 'banner');
         $insertId = $this->model->add($formData);

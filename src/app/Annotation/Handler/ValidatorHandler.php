@@ -28,7 +28,6 @@ class ValidatorHandler
         if (!$methodRule){
             return false;
         }
-        var_dump(array_merge($request->all(), $request->getUploadedFiles()));
         return BaseSupportValidator::inspect(array_merge($request->all(), $request->getUploadedFiles()), $methodRule);
     }
 }
