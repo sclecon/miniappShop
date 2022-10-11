@@ -9,7 +9,7 @@ use App\Model\ShopBannerModel;
 use App\Utils\Image;
 
 /**
- * @ApiRouter(router="admin/shop/banner", method="get", intro="首页Banner轮播图")
+ * @ApiRouter(router="admin/shop/banner", method="get", intro="市场Banner轮播图")
  */
 class ShopBanner extends BaseCurd
 {
