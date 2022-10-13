@@ -6,6 +6,7 @@ use App\Annotation\ApiRouter;
 use App\Annotation\Validator;
 use App\Controller\Admin\Base\BaseCurd;
 use App\Model\AuctionImageModel;
+use App\Utils\Http;
 use App\Utils\Image;
 
 /**
