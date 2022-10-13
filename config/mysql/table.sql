@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `config` (
     `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
     `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
     PRIMARY KEY (`config_id`)
-) comment='配置表';
+    ) comment='配置表';
 
 ALTER TABLE `config` ADD `system` INT(1) NOT NULL DEFAULT '0' COMMENT '是否系统自带不允许删除' AFTER `value`;
 
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `admin` (
     `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
     `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
     PRIMARY KEY (`admin_id`)
-) comment='管理员表';
+    ) comment='管理员表';
 
 -- create user
 CREATE TABLE IF NOT EXISTS `user` (
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `user` (
     `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
     `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
     PRIMARY KEY (`user_id`)
-) comment='用户表';
+    ) comment='用户表';
 
 -- create send_code
 CREATE TABLE IF NOT EXISTS `send_code` (
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `send_code` (
     `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
     `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
     PRIMARY KEY (`code_id`)
-) comment='验证码表';
+    ) comment='验证码表';
 
 -- create painter
 CREATE TABLE IF NOT EXISTS `painter` (
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `painter` (
     `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
     `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
     PRIMARY KEY (`painter_id`)
-) comment='画家表';
+    ) comment='画家表';
 
 -- create auction
 CREATE TABLE IF NOT EXISTS `auction` (
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `auction` (
     `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
     `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
     PRIMARY KEY (`auction_id`)
-) comment='拍品表';
+    ) comment='拍品表';
 
 -- create auction_like
 CREATE TABLE IF NOT EXISTS `auction_like` (
@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `auction_like` (
     `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
     `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
     PRIMARY KEY (`like_id`)
-) comment='拍品点赞表';
+    ) comment='拍品点赞表';
 
 -- create auction_images
 CREATE TABLE IF NOT EXISTS `auction_images` (
@@ -119,8 +119,8 @@ CREATE TABLE IF NOT EXISTS `auction_images` (
     `created_time` INT(10) DEFAULT NULL COMMENT '创建时间',
     `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
     `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
- PRIMARY KEY (`images_id`)
-) comment='拍品图片表';
+    PRIMARY KEY (`images_id`)
+    ) comment='拍品图片表';
 
 -- create auction_join
 CREATE TABLE IF NOT EXISTS `auction_join` (
@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS `auction_join` (
     `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
     `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
     PRIMARY KEY (`join_id`)
-) comment='参与竞拍记录表';
+    ) comment='参与竞拍记录表';
 
 -- create auction_topic
 CREATE TABLE IF NOT EXISTS `auction_topic` (
@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS `auction_topic` (
     `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
     `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
     PRIMARY KEY (`topic_id`)
-) comment='拍场表';
+    ) comment='拍场表';
 
 -- create auction_topic_access
 CREATE TABLE IF NOT EXISTS `auction_topic_access` (
@@ -164,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `auction_topic_access` (
     `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
     `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
     PRIMARY KEY (`access_id`)
-) comment='拍场拍品关系表';
+    ) comment='拍场拍品关系表';
 
 -- create shop_banner
 CREATE TABLE IF NOT EXISTS `shop_banner` (
@@ -175,7 +175,7 @@ CREATE TABLE IF NOT EXISTS `shop_banner` (
     `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
     `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
     PRIMARY KEY (`banner_id`)
-) comment='市场轮播图';
+    ) comment='市场轮播图';
 
 -- create banner
 CREATE TABLE IF NOT EXISTS `banner` (
@@ -186,7 +186,7 @@ CREATE TABLE IF NOT EXISTS `banner` (
     `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
     `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
     PRIMARY KEY (`banner_id`)
-) comment='首页轮播图';
+    ) comment='首页轮播图';
 
 ALTER TABLE `painter` ADD `intro` VARCHAR(255) NOT NULL COMMENT '画家简介 个人说明' AFTER `name`;
 
@@ -201,4 +201,46 @@ CREATE TABLE IF NOT EXISTS `announcement` (
     `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
     `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
     PRIMARY KEY (`announcement_id`)
-) comment='公告数据表';
+    ) comment='公告数据表';
+
+-- create shop_category
+CREATE TABLE IF NOT EXISTS `shop_category` (
+    `category_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '分类ID',
+    `name` VARCHAR(255) NOT NULL COMMENT '分类名称',
+    `intro` VARCHAR(255) DEFAULT NULL COMMENT '分类说明',
+    `image` CHAR(255) NOT NULL COMMENT '分类图标图片',
+    `weight` INT(10) DEFAULT 0 COMMENT '分类权重',
+    `created_time` INT(10) DEFAULT NULL COMMENT '创建时间',
+    `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
+    `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
+    PRIMARY KEY (`category_id`)
+    ) comment='商品分类表';
+
+-- create shop
+CREATE TABLE IF NOT EXISTS `shop` (
+    `shop_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '商品ID',
+    `category_id` INT(10) UNSIGNED NOT NULL COMMENT '分类ID',
+    `name` VARCHAR(255) NOT NULL COMMENT '商品名称',
+    `intro` VARCHAR(255) DEFAULT NULL COMMENT '商品说明',
+    `price` FLOAT(10, 2) NOT NULL COMMENT '商品价格',
+    `weight` INT(10) DEFAULT 0 COMMENT '商品权重',
+    `options` TEXT DEFAULT NULL COMMENT '商品属性',
+    `message` TEXT DEFAULT NULL COMMENT '商品详情 富文本',
+    `recommend` INT(1) DEFAULT 0 COMMENT '是否推荐',
+    `created_time` INT(10) DEFAULT NULL COMMENT '创建时间',
+    `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
+    `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
+    PRIMARY KEY (`shop_id`)
+    ) comment='商品表';
+
+-- create shop_image
+CREATE TABLE IF NOT EXISTS `shop_image` (
+    `image_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '商品ID',
+    `shop_id` INT(10) UNSIGNED NOT NULL COMMENT '商品ID',
+    `url` VARCHAR(255) NOT NULL COMMENT '主图图片',
+    `weight` INT(10) DEFAULT 0 COMMENT '主图权重',
+    `created_time` INT(10) DEFAULT NULL COMMENT '创建时间',
+    `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
+    `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
+    PRIMARY KEY (`image_id`)
+    ) comment='商品主图表';
