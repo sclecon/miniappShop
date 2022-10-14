@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exception\Service\AuctionTopicServiceException;
 use App\Model\AuctionTopicModel;
 use App\Services\BaseSupport\BaseSupportService;
+use App\Utils\Http;
 
 class AuctionTopicService extends BaseSupportService
 {
@@ -56,6 +57,7 @@ class AuctionTopicService extends BaseSupportService
         $value['end_time_str'] = date('Y-m-d H:i:s', $value['end_time']);
         $value['status_str'] = $this->getStatusStr($value['status']);
         $value['auction_count'] = AuctionTopicAccessService::instance()->getAuctionCountByTopicId((int) $value['topic_id']);
+        $value['image'] = strpos($value['image'], 'http') === 0 ? $value['image'] : Http::instance()->getDomain().$value['image'];
         return $value;
     }
 

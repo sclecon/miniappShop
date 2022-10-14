@@ -5,17 +5,20 @@ namespace App\Services;
 use App\Model\PainterModel;
 use App\Services\BaseSupport\BaseSupportService;
 use App\Utils\ArrayExpand;
+use App\Utils\Http;
 
 class PainterService extends BaseSupportService
 {
     protected $model = PainterModel::class;
 
     public function detail(int $painterId) : array {
-        return $this->getModel()
+        $pointer = $this->getModel()
             ->where('painter_id', $painterId)
             ->select(['painter_id', 'avatar', 'name', 'intro'])
             ->first()
             ->toArray();
+        $pointer['avatar'] = strpos($pointer['avatar'], 'http') === 0 ? $pointer['avatar'] : Http::instance()->getDomain().$pointer['avatar'];
+        return $pointer;
     }
 
     public function getPainterNamesInId(array $ids) : array {

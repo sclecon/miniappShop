@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Model\AuctionImageModel;
 use App\Services\BaseSupport\BaseSupportService;
 use App\Utils\ArrayExpand;
+use App\Utils\Http;
 
 class AuctionImageService extends BaseSupportService
 {
@@ -16,6 +17,15 @@ class AuctionImageService extends BaseSupportService
             ->select(['auction_id', 'name', 'url'])
             ->get()
             ->toArray();
-        return ArrayExpand::columns($list, 'auction_id');
+        $list = ArrayExpand::columns($list, 'auction_id');
+        foreach ($list as $key => $value){
+            $list[$key] = $this->format($value);
+        }
+        return $list;
+    }
+
+    protected function format(array $data) : array {
+        $data['url'] = strpos($data['url'], 'http') === 0 ? $data['url'] : Http::instance()->getDomain().$data['url'];
+        return $data;
     }
 }
