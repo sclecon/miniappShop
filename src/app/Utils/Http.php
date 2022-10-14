@@ -35,4 +35,8 @@ class Http
         $protocol = ($this->request->getUri()->getScheme() == 'https') ? 'https' : 'http';
         return $protocol;
     }
+
+    public function image(string $url) : string {
+        return strpos($url, 'http') === 0 ? $url : Http::instance()->getDomain().$url;
+    }
 }
