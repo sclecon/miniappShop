@@ -209,6 +209,7 @@ CREATE TABLE IF NOT EXISTS `shop_category` (
     `name` VARCHAR(255) NOT NULL COMMENT '分类名称',
     `intro` VARCHAR(255) DEFAULT NULL COMMENT '分类说明',
     `image` CHAR(255) NOT NULL COMMENT '分类图标图片',
+    `options` TEXT NOT NULL COMMENT '分类商品需要的属性 JSON',
     `weight` INT(10) DEFAULT 0 COMMENT '分类权重',
     `created_time` INT(10) DEFAULT NULL COMMENT '创建时间',
     `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
