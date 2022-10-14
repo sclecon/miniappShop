@@ -5,14 +5,18 @@ namespace App\Controller\Admin;
 use App\Annotation\ApiRouter;
 use App\Annotation\Validator;
 use App\Controller\Admin\Base\BaseCurd;
+use App\Controller\Admin\Base\UploadImage;
 use App\Model\ShopBannerModel;
 use App\Utils\Image;
 
 /**
  * @ApiRouter(router="admin/shop/banner", method="get", intro="市场Banner轮播图")
  */
-class ShopBanner extends BaseCurd
+class ShopBanner extends UploadImage
 {
+
+    protected $imageModule = 'shop/banner';
+
     public function __construct()
     {
         $this->model = new ShopBannerModel();
