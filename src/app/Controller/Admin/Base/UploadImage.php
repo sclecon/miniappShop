@@ -60,7 +60,6 @@ class UploadImage extends BaseCurd
             return $this->error('必须上传图片文件【png或jpeg格式】');
         }
         $formData[$this->imageField] = Image::instance()->upload($file, $this->imageModule);
-        return $this->error('调试结束', $formData);
         $insertId = $this->model->add($formData);
         $this->cache->clear(__METHOD__, $formData);
         return !$insertId ? $this->error('新增数据失败') : $this->success('新增数据成功', [
