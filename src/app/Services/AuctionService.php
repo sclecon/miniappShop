@@ -71,6 +71,22 @@ class AuctionService extends BaseSupportService
         return $list;
     }
 
+    public function getAuctionListInAuctionIds(array $auctionIds){
+        $list = $this->getModel()
+            ->whereIn('auction_id', $auctionIds)
+            ->select(['auction_id', 'painter_id', 'name', 'intro', 'start_price', 'start_time', 'end_time', 'status', 'buy_now_price'])
+            ->get();
+        $list = $list ? $list->toArray() : [];
+        $painterId = array_unique(array_values(ArrayExpand::columnKey($list, 'auction_id', 'painter_id')));
+        $painterNames = PainterService::instance()->getPainterNamesInId($painterId);
+        $painterId = array_keys(ArrayExpand::columns($list, 'auction_id'));
+        $images = AuctionImageService::instance()->getAuctionImagesInAuctionId($painterId);
+        foreach ($list as $key => $value){
+            $list[$key] = $this->format($value, $painterNames, $images, []);
+        }
+        return ArrayExpand::column($list, 'auction_id');
+    }
+
     public function detail(int $auctionId, int $userId) : array {
         $detail = $this->getModel()
             ->where('auction_id', $auctionId)
