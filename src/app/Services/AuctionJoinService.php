@@ -11,7 +11,7 @@ class AuctionJoinService extends BaseSupportService
     protected $model = AuctionJoinModel::class;
 
     public function addJoin(int $userId, int $auctionId, string $joinPrice) : int {
-        $auction = AuctionService::instance()->detail($auctionId);
+        $auction = AuctionService::instance()->detail($auctionId,$userId);
         if ($auction['status'] != 1){
             throw new AuctionJoinServiceException('拍品当前状态无法进行参与竞拍');
         }
