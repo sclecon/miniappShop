@@ -74,12 +74,12 @@ class AuctionService extends BaseSupportService
     public function detail(int $auctionId, int $userId) : array {
         $detail = $this->getModel()
             ->where('auction_id', $auctionId)
-            ->first()
-            ->toArray();
+            ->first();
+        $detail = $detail ? $detail->toArray() : [];
         if (!$detail){
             throw new AuctionServiceException('拍品不存在', 404);
         }
-        $painterId = [$auctionId];
+        $painterId = [$detail['painter_id']];
         $painterNames = PainterService::instance()->getPainterNamesInId($painterId);
         $images = AuctionImageService::instance()->getAuctionImagesInAuctionId($painterId);
         $likes = AuctionLikeService::instance()->has($userId, $painterId);
@@ -106,7 +106,7 @@ class AuctionService extends BaseSupportService
         if (isset($item['delay'])){
             $item['delay_str'] = $item['delay'].'分钟';
         }
-        $item['like'] = $likes[$item['auction_id']];
+        $item['like'] = isset($likes[$item['auction_id']]) ? $likes[$item['auction_id']] : 0;
         return $item;
     }
 }
