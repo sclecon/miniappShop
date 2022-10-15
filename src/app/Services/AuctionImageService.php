@@ -19,7 +19,9 @@ class AuctionImageService extends BaseSupportService
             ->toArray();
         $list = ArrayExpand::columns($list, 'auction_id');
         foreach ($list as $key => $value){
-            $list[$key] = $this->format($value);
+            foreach ($value as $_k => $_v){
+                $list[$key][$_k] = $this->format($_v);
+            }
         }
         return $list;
     }

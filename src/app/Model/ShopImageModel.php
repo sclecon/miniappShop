@@ -13,7 +13,7 @@ use App\Model\BaseSupport\BaseSupportModel;
 
 class ShopImageModel extends BaseSupportModel
 {
-    protected $model = 'shop_image';
+    protected $table = 'shop_image';
 
     protected $primaryKey = 'image_id';
 }

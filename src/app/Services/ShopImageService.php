@@ -12,6 +12,7 @@ namespace App\Services;
 use App\Model\ShopImageModel;
 use App\Services\BaseSupport\BaseSupportService;
 use App\Utils\ArrayExpand;
+use App\Utils\Http;
 
 class ShopImageService extends BaseSupportService
 {
@@ -25,6 +26,10 @@ class ShopImageService extends BaseSupportService
             ->orderByDesc('image_id')
             ->get()
             ->toArray();
-        return ArrayExpand::columnKey($list, 'shop_id', 'url');
+        $list = ArrayExpand::columnKey($list, 'shop_id', 'url');
+        foreach ($list as $key => $value){
+            $list[$key] = Http::instance()->image($value);
+        }
+        return $list;
     }
 }

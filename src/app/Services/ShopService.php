@@ -61,7 +61,7 @@ class ShopService extends BaseSupportService
         $model = $model->select(['shop_id', 'category_id', 'name', 'intro', 'price']);
         $model = $model->forPage($page, $number);
         $list = $model->get()->toArray();
-        $shopImages = ShopImageService::instance()->getShopImageInShopIds(ArrayExpand::getKeys($list, 'shop_id'));
+        $shopImages = ArrayExpand::getKeys($list, 'shop_id') ? ShopImageService::instance()->getShopImageInShopIds(ArrayExpand::getKeys($list, 'shop_id')) : [];
         foreach ($list as $key => $value){
             $list[$key] = $this->format($value, $shopImages);
         }

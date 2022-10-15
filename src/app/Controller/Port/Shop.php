@@ -41,7 +41,7 @@ class Shop extends BaseSupportController
 
     /**
      * @ApiRouter(router="list", method="get", intro="获取商品列表")
-     * @Validator(attribute="category_id", required=true, rule="integer", intro="分类ID")
+     * @Validator(attribute="category_id", required=false, rule="integer", intro="分类ID")
      * @Validator(attribute="search", required=false, rule="string", intro="搜索关键词")
      * @Validator(attribute="recommend", required=false, rule="integer", intro="是否为推荐")
      * @Validator(attribute="order_field", required=false, rule="string", intro="排序字段")
@@ -57,6 +57,6 @@ class Shop extends BaseSupportController
         $orderDesc = (string) in_array($this->request->input('order_desc'), ['desc', 'asc']) ? $this->request->input('order_desc') : 'desc';
         $page = (int) $this->request->input('page', 1);
         $number = (int) $this->request->input('number', 20);
-        return $this->success('获取推荐商品成功', ShopService::instance()->list($categoryId, $search, $recommend, $orderField, $orderDesc, $page, $number));
+        return $this->success('获取商品列表成功', ShopService::instance()->list($categoryId, $search, $recommend, $orderField, $orderDesc, $page, $number));
     }
 }
