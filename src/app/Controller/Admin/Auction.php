@@ -41,11 +41,6 @@ class Auction extends BaseCurd
                 ->select()
                 ->get()
                 ->toArray();
-//            $inIds = ArrayExpand::getKeys($list, 'painter_id');
-//            $painters = $inIds ? PainterService::instance()->getPainterNamesInId($inIds) : [];
-//            foreach ($list as $key => $value){
-//                $list[$key]['painter'] = isset($painters[$value['painter_id']]) ? $painters[$value['painter_id']] : '未知画家';
-//            }
             $painterId = array_unique(array_values(ArrayExpand::columnKey($list, 'auction_id', 'painter_id')));
             $painterNames = PainterService::instance()->getPainterNamesInId($painterId);
             $painterId = array_keys(ArrayExpand::columns($list, 'auction_id'));
