@@ -107,7 +107,7 @@ class AuctionService extends BaseSupportService
         return isset($status[$s]) ? $status[$s] : '未知状态';
     }
 
-    protected function format(array $item, array $painterNames, array $images, array $likes) : array {
+    public function format(array $item, array $painterNames, array $images, array $likes) : array {
         $item['start_time_str'] = date('Y-m-d H:i:s', time());
         $item['end_time_str'] = date('Y-m-d H:i:s', time());
         $item['status_str'] = $this->getStatusStr($item['status']);

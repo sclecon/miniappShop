@@ -6,6 +6,9 @@ use App\Annotation\ApiRouter;
 use App\Annotation\Validator;
 use App\Controller\Admin\Base\BaseCurd;
 use App\Model\AuctionModel;
+use App\Services\AuctionImageService;
+use App\Services\AuctionLikeService;
+use App\Services\AuctionService;
 use App\Services\PainterService;
 use App\Utils\ArrayExpand;
 
@@ -38,10 +41,17 @@ class Auction extends BaseCurd
                 ->select()
                 ->get()
                 ->toArray();
-            $inIds = ArrayExpand::getKeys($list, 'painter_id');
-            $painters = $inIds ? PainterService::instance()->getPainterNamesInId($inIds) : [];
+//            $inIds = ArrayExpand::getKeys($list, 'painter_id');
+//            $painters = $inIds ? PainterService::instance()->getPainterNamesInId($inIds) : [];
+//            foreach ($list as $key => $value){
+//                $list[$key]['painter'] = isset($painters[$value['painter_id']]) ? $painters[$value['painter_id']] : '未知画家';
+//            }
+            $painterId = array_unique(array_values(ArrayExpand::columnKey($list, 'auction_id', 'painter_id')));
+            $painterNames = PainterService::instance()->getPainterNamesInId($painterId);
+            $painterId = array_keys(ArrayExpand::columns($list, 'auction_id'));
+            $images = AuctionImageService::instance()->getAuctionImagesInAuctionId($painterId);
             foreach ($list as $key => $value){
-                $list[$key]['painter'] = isset($painters[$value['painter_id']]) ? $painters[$value['painter_id']] : '未知画家';
+                $list[$key] = AuctionService::instance()->format($value, $painterNames, $images, []);
             }
         }
         return $this->success('获取数据列表成功', [
