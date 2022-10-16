@@ -95,10 +95,9 @@ class AuctionService extends BaseSupportService
         if (!$detail){
             throw new AuctionServiceException('拍品不存在', 404);
         }
-        $painterId = [$detail['painter_id']];
-        $painterNames = PainterService::instance()->getPainterNamesInId($painterId);
-        $images = AuctionImageService::instance()->getAuctionImagesInAuctionId($painterId);
-        $likes = AuctionLikeService::instance()->has($userId, $painterId);
+        $painterNames = PainterService::instance()->getPainterNamesInId([$detail['painter_id']]);
+        $images = AuctionImageService::instance()->getAuctionImagesInAuctionId([$auctionId]);
+        $likes = AuctionLikeService::instance()->has($userId, [$auctionId]);
         return $this->format($detail, $painterNames, $images, $likes);
     }
 

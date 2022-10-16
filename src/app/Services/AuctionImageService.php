@@ -14,7 +14,7 @@ class AuctionImageService extends BaseSupportService
     public function getAuctionImagesInAuctionId(array $auctionId) : array {
         $list = $this->getModel()
             ->whereIn('auction_id', $auctionId)
-            ->select(['auction_id', 'name', 'url', 'image_id'])
+            ->select(['auction_id', 'name', 'url', 'images_id'])
             ->get()
             ->toArray();
         $list = ArrayExpand::columns($list, 'auction_id');
