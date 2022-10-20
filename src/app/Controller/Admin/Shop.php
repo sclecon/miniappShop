@@ -91,4 +91,26 @@ class Shop extends BaseCurd
         $this->cache->clear(__METHOD__, $data->toArray());
         return $this->success('修改数据成功', $formData);
     }
+
+    /**
+     * @ApiRouter(router="add", intro="新增数据", method="PUT")
+     */
+    public function add(){
+        $formData = $this->form->getPostData();
+        if ($formData['options'] && is_array($formData['options'])){
+            $formData['options'] = json_encode($formData['options']);
+        }
+        if ($formData['message']){
+            $formData['message'] = htmlspecialchars($formData['message']);
+        }
+        if (!$formData){
+            return $this->error('插入数据失败，未能获取到有效数据。');
+        }
+        $insertId = $this->model->add($formData);
+        $this->cache->clear(__METHOD__, $formData);
+        return !$insertId ? $this->error('新增数据失败') : $this->success('新增数据成功', [
+            $this->model->getPrimaryKey()       =>  $insertId,
+            'data'                              =>  $formData
+        ]);
+    }
 }
