@@ -57,6 +57,8 @@ class Shop extends BaseSupportController
         $orderDesc = (string) in_array($this->request->input('order_desc'), ['desc', 'asc']) ? $this->request->input('order_desc') : 'desc';
         $page = (int) $this->request->input('page', 1);
         $number = (int) $this->request->input('number', 20);
-        return $this->success('获取商品列表成功', ShopService::instance()->list($categoryId, $search, $recommend, $orderField, $orderDesc, $page, $number));
+        return $this->success('获取商品列表成功', [
+            'list'  =>  ShopService::instance()->list($categoryId, $search, $recommend, $orderField, $orderDesc, $page, $number)
+        ]);
     }
 }
