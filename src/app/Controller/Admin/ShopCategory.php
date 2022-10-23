@@ -6,6 +6,8 @@ use App\Annotation\ApiRouter;
 use App\Annotation\Validator;
 use App\Controller\Admin\Base\UploadImage;
 use App\Model\ShopCategoryModel;
+use App\Utils\Http;
+use App\Utils\Image;
 
 /**
  * @ApiRouter(router="admin/shop/category", method="get", intro="商品分类")
@@ -15,6 +17,8 @@ class ShopCategory extends UploadImage
 
     protected $moreFormData = true;
     protected $imageModule = 'shop/category';
+    protected $imageField = 'image';
+    protected $uploadField = 'image';
 
 
     public function __construct()
@@ -34,6 +38,8 @@ class ShopCategory extends UploadImage
             ->first();
         if($data){
             $data->options = json_decode($data->options, true) ?: [];
+            $imageField = $this->imageField;
+            $data->$imageField = Http::instance()->image($data->$imageField);
         }
         return $data ?  $this->success('获取数据详情成功', $data->toArray()) : $this->error('获取数据详情失败');
     }
@@ -54,6 +60,16 @@ class ShopCategory extends UploadImage
         if ($formData['options'] && is_array($formData['options'])){
             $formData['options'] = json_encode($formData['options']);
         }
+
+        if ($file = $this->request->file($this->uploadField)){
+            $extType = explode('/', $file->getMimeType());
+            $extType = $extType[1];
+            if (in_array($extType, $this->imageTypes) === false){
+                return $this->error('必须上传图片文件【png或jpeg格式】');
+            }
+            $formData[$this->imageField] = Image::instance()->upload($file, $this->imageModule);
+        }
+
         $response = $this->model
             ->where($this->model->getPrimaryKey(), $primaryKey)
             ->update($formData);
@@ -64,17 +80,23 @@ class ShopCategory extends UploadImage
         return $this->success('修改数据成功', $formData);
     }
 
-    /**
-     * @ApiRouter(router="add", intro="新增数据", method="PUT")
-     */
     public function add(){
         $formData = $this->form->getPostData();
         if ($formData['options'] && is_array($formData['options'])){
             $formData['options'] = json_encode($formData['options']);
         }
-        if (!$formData){
+        if (!$formData && $this->moreFormData){
             return $this->error('插入数据失败，未能获取到有效数据。');
         }
+        if (!$file = $this->request->file($this->uploadField)){
+            return $this->error('必须上传图片文件，字段为：image');
+        }
+        $extType = explode('/', $file->getMimeType());
+        $extType = $extType[1];
+        if (in_array($extType, ['png', 'jpeg']) === false){
+            return $this->error('必须上传图片文件【png或jpeg格式】');
+        }
+        $formData[$this->imageField] = Image::instance()->upload($file, $this->imageModule);
         $insertId = $this->model->add($formData);
         $this->cache->clear(__METHOD__, $formData);
         return !$insertId ? $this->error('新增数据失败') : $this->success('新增数据成功', [
@@ -103,6 +125,7 @@ class ShopCategory extends UploadImage
                 ->toArray();
             foreach ($list as $key => $value){
                 $list[$key]['options'] = json_decode($value['options']) ?: [];
+                $list[$key][$this->imageField] = strpos($list[$key][$this->imageField], 'http') === 0 ? $list[$key][$this->imageField] : Http::instance()->getDomain().$list[$key][$this->imageField];
             }
         }
         return $this->success('获取数据列表成功', [

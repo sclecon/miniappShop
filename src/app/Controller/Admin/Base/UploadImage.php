@@ -42,6 +42,22 @@ class UploadImage extends BaseCurd
      */
     protected $imageTypes = ['png', 'jpeg'];
 
+    /**
+     * @ApiRouter(router="find", intro="获取详情", method="GET")
+     * @Validator(attribute="id", rule="integer", required=true)
+     */
+    public function find(){
+        $primaryKey = $this->request->input('id', 0);
+        $data = $this->model
+            ->where($this->model->getPrimaryKey(), $primaryKey)
+            ->first();
+        if($data){
+            $imageField = $this->imageField;
+            $data->$imageField = Http::instance()->image($data->$imageField);
+        }
+        return $data ?  $this->success('获取数据详情成功', $data->toArray()) : $this->error('获取数据详情失败');
+    }
+
 
     /**
      * @ApiRouter(router="add", intro="新增拍品图片", method="PUT")
@@ -56,7 +72,7 @@ class UploadImage extends BaseCurd
         }
         $extType = explode('/', $file->getMimeType());
         $extType = $extType[1];
-        if (in_array($extType, ['png', 'jpeg']) === false){
+        if (in_array($extType, $this->imageTypes) === false){
             return $this->error('必须上传图片文件【png或jpeg格式】');
         }
         $formData[$this->imageField] = Image::instance()->upload($file, $this->imageModule);
