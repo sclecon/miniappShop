@@ -20,7 +20,7 @@ use App\Services\ShopService;
 class Shop extends BaseSupportController
 {
     /**
-     * @ApiRouter(router="category/recommend", method="get", intro="推荐商品")
+     * @ApiRouter(router="category/recommend", method="get", intro="分类下默认展示商品")
      * @Validator(attribute="category_id", required=true, rule="integer", intro="分类ID")
      */
     public function recommend(){
