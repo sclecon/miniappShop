@@ -8,5 +8,5 @@ class AuctionImageModel extends BaseSupportModel
 {
     protected $table = 'auction_images';
 
-    protected $primaryKey = 'image_id';
+    protected $primaryKey = 'images_id';
 }
