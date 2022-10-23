@@ -70,7 +70,9 @@ class ShopService extends BaseSupportService
 
     protected function format(array $shop, array $shopImages) : array {
         $shop['options'] = json_decode($shop['options'], true) ?: [];
-        $shop['message'] = htmlspecialchars_decode($shop['message']);
+        if (isset($shop['message'])){
+            $shop['message'] = htmlspecialchars_decode($shop['message']);
+        }
         if (isset($shop['created_time'])) $shop['created_time_str'] = date('Y-m-d H:i:s', $shop['created_time']);
         $shop['shop_image'] = isset($shopImages[$shop['shop_id']]) ? $shopImages[$shop['shop_id']] : [];
         return $shop;

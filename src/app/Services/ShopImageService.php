@@ -21,14 +21,18 @@ class ShopImageService extends BaseSupportService
     public function getShopImageInShopIds(array $shopIds) : array {
         $list = $this->getModel()
             ->whereIn('shop_id', $shopIds)
-            ->select(['shop_id', 'url'])
+            ->select(['shop_id', 'url', 'image_id'])
             ->orderByDesc('weight')
             ->orderByDesc('image_id')
             ->get()
             ->toArray();
-        $list = ArrayExpand::columnKey($list, 'shop_id', 'url');
-        foreach ($list as $key => $value){
-            $list[$key] = Http::instance()->image($value);
+        $list = ArrayExpand::columns($list, 'shop_id', 'image_id');
+        foreach ($list as $shopId => $value){
+            $images = [];
+            foreach ($value as $image){
+                $images[] = Http::instance()->image($image['url']);
+            }
+            $list[$shopId] = $images;
         }
         return $list;
     }
