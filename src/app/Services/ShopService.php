@@ -58,7 +58,7 @@ class ShopService extends BaseSupportService
             $model = $model->where('recommend', 1);
         }
         $model = $model->orderBy($orderField, $orderDesc);
-        $model = $model->select(['shop_id', 'category_id', 'name', 'intro', 'price']);
+        $model = $model->select(['shop_id', 'category_id', 'name', 'intro', 'price', 'options']);
         $model = $model->forPage($page, $number);
         $list = $model->get()->toArray();
         $shopImages = ArrayExpand::getKeys($list, 'shop_id') ? ShopImageService::instance()->getShopImageInShopIds(ArrayExpand::getKeys($list, 'shop_id')) : [];
