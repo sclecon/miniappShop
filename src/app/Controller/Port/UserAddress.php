@@ -8,7 +8,7 @@ use App\Controller\BaseSupport\BaseSupportController;
 use App\Services\UserAddressService;
 
 /**
- * @ApiRouter(router="port/user/address", method="get", intro="市场模块分类")
+ * @ApiRouter(router="port/user/address", method="get", intro="用户收货地址")
  */
 class UserAddress extends BaseSupportController
 {
@@ -90,6 +90,9 @@ class UserAddress extends BaseSupportController
         return $this->success('删除收货地址成功');
     }
 
+    /**
+     * @ApiRouter(router="default", method="get", intro="获取默认收货地址")
+     */
     public function default(){
         $userId = $this->getAuthUserId();
         $address = UserAddressService::instance()->detail($userId, 0, 1);
