@@ -38,4 +38,10 @@ abstract class BaseSupportController
     protected $response;
 
     use Response;
+
+    protected function getAuthUserId() : int {
+        $user = $this->request->getAttribute('user');
+        $userId = $user ? $user['user_id'] : 1;
+        return (int) $userId;
+    }
 }
