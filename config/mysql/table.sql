@@ -245,3 +245,5 @@ CREATE TABLE IF NOT EXISTS `shop_image` (
     `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
     PRIMARY KEY (`image_id`)
     ) comment='商品主图表';
+
+CREATE TABLE `shop`.`user_address` (`address_id` INT NOT NULL AUTO_INCREMENT COMMENT '地址ID' , `user_id` INT NOT NULL COMMENT '用户ID' , `default` INT NOT NULL DEFAULT '0' COMMENT '是否为默认' , `name` VARCHAR(32) NOT NULL COMMENT '收件人姓名' , `province` VARCHAR(32) NOT NULL COMMENT '省' , `city` VARCHAR(32) NOT NULL COMMENT '市' , `area` VARCHAR(32) NOT NULL COMMENT '区' , `detail` VARCHAR(255) NOT NULL COMMENT '详细地址' , `phone` CHAR(11) NOT NULL COMMENT '联系电话' , `created_time` INT NOT NULL COMMENT '添加时间' , `updated_time` INT NOT NULL COMMENT '修改时间' , `deleted_time` INT NOT NULL COMMENT '删除时间' , PRIMARY KEY (`address_id`)) ENGINE = InnoDB;
