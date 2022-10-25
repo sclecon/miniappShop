@@ -30,7 +30,7 @@ class ShopOrder extends BaseSupportController
     }
 
     /**
-     * @ApiRouter(router="place_an_order", method="delete", intro="关闭订单")
+     * @ApiRouter(router="close", method="delete", intro="关闭订单")
      * @Validator(attribute="order_number", required=true, rule="string", intro="订单号")
      */
     public function close(){
@@ -61,7 +61,7 @@ class ShopOrder extends BaseSupportController
     }
 
     /**
-     * @ApiRouter(router="list", method="get", intro="获取订单详情")
+     * @ApiRouter(router="detail", method="get", intro="获取订单详情")
      * @Validator(attribute="order_number", required=false, rule="string", intro="订单号")
      */
     public function detail(){
