@@ -20,7 +20,7 @@ class UserAddress extends BaseSupportController
      * @Validator(attribute="area", required=true, rule="string", intro="区县")
      * @Validator(attribute="detail", required=true, rule="string", intro="地址详情")
      * @Validator(attribute="phone", required=true, rule="string", intro="联系电话")
-     * @Validator(attribute="default", required=true, rule="string", intro="是否默认")
+     * @Validator(attribute="default", required=true, rule="integer", intro="是否默认")
      */
     public function add(){
         $userId = $this->getAuthUserId();
@@ -55,7 +55,7 @@ class UserAddress extends BaseSupportController
      * @Validator(attribute="area", required=true, rule="string", intro="区县")
      * @Validator(attribute="detail", required=true, rule="string", intro="地址详情")
      * @Validator(attribute="phone", required=true, rule="string", intro="联系电话")
-     * @Validator(attribute="default", required=true, rule="string", intro="是否默认")
+     * @Validator(attribute="default", required=true, rule="integer", intro="是否默认")
      */
     public function save(){
         $userId = $this->getAuthUserId();

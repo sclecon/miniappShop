@@ -5,14 +5,14 @@ namespace App\Event\User\Address;
 class AddAddressEvent
 {
 
-    protected $userId;
-    protected $name;
-    protected $province;
-    protected $city;
-    protected $area;
-    protected $detail;
-    protected $phone;
-    protected $default;
+    public $userId;
+    public $name;
+    public $province;
+    public $city;
+    public $area;
+    public $detail;
+    public $phone;
+    public $default;
 
 
     public function __construct(int $userId, string $name, string $province, string $city, string $area, string $detail, int $phone, int $default){

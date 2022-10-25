@@ -4,7 +4,7 @@ namespace App\Event\User\Address;
 
 class DeletedAddressEvent
 {
-    protected $userId;
+    public $userId;
 
     public function __con(int $userId){
         $this->userId = $userId;
