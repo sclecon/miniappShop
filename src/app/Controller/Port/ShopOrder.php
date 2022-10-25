@@ -39,4 +39,35 @@ class ShopOrder extends BaseSupportController
         ShopOrderService::instance()->closeOrder($userId, $orderNumber);
         return $this->success('关闭订单成功');
     }
+
+    /**
+     * @ApiRouter(router="list", method="get", intro="获取订单列表")
+     * @Validator(attribute="status", required=false, rule="integer", intro="订单状态 1=待支付 0=已取消 2=待配送 3=配送中 4=已完成 5=不限制")
+     * @Validator(attribute="order", required=false, rule="string", intro="排序字段 默认created_time")
+     * @Validator(attribute="desc", required=false, rule="string", intro="排序方式 desc 或 asc")
+     * @Validator(attribute="page", required=false, rule="integer", intro="分页")
+     * @Validator(attribute="number", required=false, rule="integer", intro="显示数量")
+     */
+    public function list(){
+        $userId = $this->getAuthUserId();
+        $status = (int) $this->request->input('status', 5);
+        $order = $this->request->input('order', 'created_time');
+        $desc = in_array($this->request->input('desc', 'desc'), ['desc', 'asc']) ? $this->request->input('desc', 'desc') : 'desc';
+        $page = (int) $this->request->input('page', 1);
+        $number = (int) $this->request->input('number', 20);
+        return $this->success('获取订单列表成功', [
+            'list'  =>  ShopOrderService::instance()->list($userId, $status, $order, $desc, $page, $number),
+        ]);
+    }
+
+    /**
+     * @ApiRouter(router="list", method="get", intro="获取订单详情")
+     * @Validator(attribute="order_number", required=false, rule="string", intro="订单号")
+     */
+    public function detail(){
+        $userId = $this->getAuthUserId();
+        $orderNumber = $this->request->input('order_number');
+        $detail = ShopOrderService::instance()->detail($userId, $orderNumber);
+        return $this->success('获取订单详情成功', $detail);
+    }
 }

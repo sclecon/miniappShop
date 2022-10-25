@@ -12,6 +12,7 @@ namespace App\Services;
 use App\Exception\Service\ShopOrderServiceException;
 use App\Model\ShopOrderModel;
 use App\Services\BaseSupport\BaseSupportService;
+use App\Utils\Http;
 
 class ShopOrderService extends BaseSupportService
 {
@@ -31,6 +32,7 @@ class ShopOrderService extends BaseSupportService
             'address_id'=>  $addressId,
             'username'  =>  $userInfo['username'],
             'shop_name' =>  $shop['name'],
+            'shop_image'=>  isset($shop['shop_image'][0]) ? $shop['shop_image'][0] : '',
             'order_number'  =>  $orderCode,
             'shop_price'    =>  $shop['price'],
             'buy_number'    =>  $buyNumber,
@@ -42,6 +44,31 @@ class ShopOrderService extends BaseSupportService
 
     public function closeOrder(int $userId, string $orderNumber){
         return $this->getModel()->where('user_id', $userId)->where('order_number', $orderNumber)->update(['status'=>0]);
+    }
+
+    public function list(int $userId, int $status, string $order, string $desc, int $page, int $number){
+        $list = $this->getModel();
+        $list = $list->where('user_id', $userId);
+        if ($status !== 5){
+            $list = $list->where('status', $status);
+        }
+        $list = $list->orderBy($order, $desc);
+        $list = $list->forPage($page, $number);
+        $list = $list->select(['shop_name', 'shop_image', 'order_number', 'shop_price', 'buy_number', 'total_price', 'status', 'payed', 'sended']);
+        $list = $list->get()->toArray();
+        foreach ($list as $key => $value){
+            $list[$key]['shop_image'] = Http::instance()->image($value['shop_image']);
+        }
+        return $list;
+    }
+
+    public function detail(int $userId, string $orderNumber) : array {
+        $order = $this->getModel()->where('user_id', $userId)->where('order_number', $orderNumber)->first();
+        if (!$order){
+            throw new ShopOrderServiceException('订单不存在');
+        }
+        $order->shop_image = Http::instance()->image($order->shop_image);
+        return $order->toArray();
     }
 
     protected function createOrderNumber() : string {
