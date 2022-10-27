@@ -41,7 +41,7 @@ class UserAddressService extends BaseSupportService
     }
 
     public function detail(int $userId, int $addressId = 0, int $default = 0){
-        if (!$default && $addressId){
+        if (!$default && !$addressId){
             throw new UserAddressServiceException('获取收货地址详情必须传递出一个收货地址凭证');
         }
         $address = $this->getModel()
