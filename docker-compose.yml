@@ -13,6 +13,7 @@ services:
     container_name: 'shop'
     ports:
       - "9001:9501"
+      - "80:9501"
     volumes:
       - "./src:/opt/www"
     entrypoint: "top"
