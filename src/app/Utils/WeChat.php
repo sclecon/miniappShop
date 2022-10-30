@@ -35,9 +35,9 @@ class WeChat
 
     protected static function config() : array {
         return [
-            'app_id'        =>      'wx7e45af66afb6ecac',
-            'secret'        =>      '51753f541540e817d192277c757b8d0f',
-            'token'         =>      'token'
+            'app_id'        =>      'wxd4573d78c8dd5ee9',
+            'secret'        =>      'd0dc1a655a739b8ad5880af868221cfa',
+            'token'         =>      'test1234'
         ];
     }
 }
