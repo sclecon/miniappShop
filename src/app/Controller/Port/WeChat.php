@@ -35,6 +35,12 @@ class WeChat extends BaseSupportController
 
         $response = $app->server->serve();
 
+        var_dump('微信来了');
+
+        var_dump($_SERVER);
+
+        var_dump($this->request->getHeaders());
+
         // 将响应输出
         return $response->getContent(); // Laravel 里请使用：return $response;
     }
