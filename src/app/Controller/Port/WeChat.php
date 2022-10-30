@@ -27,7 +27,8 @@ class WeChat extends BaseSupportController
             'app_id'        =>      'wx7e45af66afb6ecac',
             'secret'        =>      '51753f541540e817d192277c757b8d0f',
             'token'         =>      'test1234',
-            'response_type' => 'array',
+            'response_type' =>      'array',
+            'aes_key'       =>      '2OerKZJ3TBmMftUWEGR0hYVdITqzTAMnLj39dYd397M'
         ];
 
         $app = Factory::officialAccount($config);
