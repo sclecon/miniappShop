@@ -19,16 +19,16 @@ class WeChat
     public static function app() {
         if (is_null(self::$app)){
             self::$app = Factory::officialAccount(self::config());
-//            $handler = new CoroutineHandler();
-//            $config = self::$app['config']->get('http', []);
-//            $config['handler'] = $stack = HandlerStack::create($handler);
-//            self::$app->rebind('http_client', new Client($config));
-//            self::$app['guzzle_handler'] = $handler;
-//            self::$app->oauth->setGuzzleOptions([
-//                'http_errors' => false,
-//                'handler' => $stack,
-//            ]);
-//            self::$app['cache'] = ApplicationContext::getContainer()->get(CacheInterface::class);
+            $handler = new CoroutineHandler();
+            $config = self::$app['config']->get('http', []);
+            $config['handler'] = $stack = HandlerStack::create($handler);
+            self::$app->rebind('http_client', new Client($config));
+            self::$app['guzzle_handler'] = $handler;
+            self::$app->oauth->setGuzzleOptions([
+                'http_errors' => false,
+                'handler' => $stack,
+            ]);
+            self::$app['cache'] = ApplicationContext::getContainer()->get(CacheInterface::class);
         }
         return self::$app;
     }

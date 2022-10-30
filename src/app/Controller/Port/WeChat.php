@@ -16,7 +16,8 @@ class WeChat extends BaseSupportController
      */
     public function server(){
         $response = \App\Utils\WeChat::app()->server->serve();
-        return $response->send();
+        $response = $this->request->input('echostr', $response->getContent());
+        return $response;
     }
 
     /**
@@ -28,7 +29,6 @@ class WeChat extends BaseSupportController
             'secret'        =>      'd0dc1a655a739b8ad5880af868221cfa',
             'token'         =>      'test1234',
             'response_type' =>      'array',
-            // 'aes_key'       =>      '2OerKZJ3TBmMftUWEGR0hYVdITqzTAMnLj39dYd397M'
         ];
 
         $app = Factory::officialAccount($config);
