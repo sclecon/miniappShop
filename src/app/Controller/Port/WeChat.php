@@ -19,39 +19,4 @@ class WeChat extends BaseSupportController
         $response = $this->request->input('echostr', $response->getContent());
         return $response;
     }
-
-    /**
-     * @ApiRouter(router="server/test", method={"get", "post", "put"}, intro="服务接口")
-     */
-    public function test(){
-        $config = [
-            'app_id'        =>      'wxd4573d78c8dd5ee9',
-            'secret'        =>      'd0dc1a655a739b8ad5880af868221cfa',
-            'token'         =>      'test1234',
-            'response_type' =>      'array',
-        ];
-
-        $app = Factory::officialAccount($config);
-
-        $response = $app->server->serve();
-
-        var_dump('微信来了');
-
-        var_dump($_SERVER);
-
-        var_dump($this->request->getHeaders());
-
-        // 将响应输出
-        $response = $response->getContent(); // Laravel 里请使用：return $response;
-
-        var_dump($response);
-
-        var_dump($this->request->inputs(['signature', 'timestamp', 'nonce', 'echostr']));
-
-        $response = $this->request->input('echostr', 'success');
-
-        var_dump($response);
-
-        return $response;
-    }
 }
