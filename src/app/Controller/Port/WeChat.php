@@ -48,6 +48,10 @@ class WeChat extends BaseSupportController
 
         var_dump($this->request->inputs(['signature', 'timestamp', 'nonce', 'echostr']));
 
+        $response = $this->request->input('echostr', 'success');
+
+        var_dump($response);
+
         return $response;
     }
 }
