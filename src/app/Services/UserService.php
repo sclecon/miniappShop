@@ -42,4 +42,12 @@ class UserService extends BaseSupportService
     public function getUserInfoByUserId(int $userId) : array {
         return $this->getModel()->where('user_id', $userId)->first()->toArray();
     }
+
+    public function getUserDepositInfo(int $userId) : array {
+        return $this->getModel()
+            ->where('user_id', $userId)
+            ->select(['deposit', 'freeze_deposit'])
+            ->first()
+            ->toArray();
+    }
 }

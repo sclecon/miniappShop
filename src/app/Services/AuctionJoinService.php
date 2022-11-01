@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exception\Service\AuctionJoinServiceException;
 use App\Model\AuctionJoinModel;
 use App\Services\BaseSupport\BaseSupportService;
+use App\Utils\Http;
 
 class AuctionJoinService extends BaseSupportService
 {
@@ -40,6 +41,31 @@ class AuctionJoinService extends BaseSupportService
             ->toArray();
         foreach ($list as $key => $value){
             $value['created_time'] = date('Y-m-d H:i:s', $value['created_time']);
+            $list[$key] = $value;
+        }
+        return $list;
+    }
+
+    public function userJoinList(int $auctionId, int $page, int $number){
+        $auction = AuctionService::instance()->getModel();
+        $auctionImage = AuctionImageService::instance()->getModel();
+        $list = $this->getModel()
+            ->where($this->getModel()->getTableKey('auction_id'), $auctionId)
+            ->orderByDesc($this->getModel()->getTableKey('join_id'))
+            ->join($auction->getTable(), $auction->getTableKey('auction_id'), $this->getModel()->getTableKey('auction_id'))
+            ->join($auctionImage->getTable(), $auctionImage->getTableKey('auction_id'), $this->getModel()->getTableKey('auction_id'))
+            ->forPage($page, $number)
+            ->select([
+                $this->getModel()->getTableKey('*'),
+                $auction->getTableKey('name'),
+                $auction->getTableKey('intro'),
+                $auctionImage->getTableKey('url as image'),
+            ])
+            ->get()
+            ->toArray();
+        foreach ($list as $key => $value){
+            $value['created_time'] = date('Y-m-d H:i:s', $value['created_time']);
+            $value['image'] = Http::instance()->image($value['image']);
             $list[$key] = $value;
         }
         return $list;

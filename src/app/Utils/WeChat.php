@@ -2,6 +2,7 @@
 
 namespace App\Utils;
 
+use App\Services\ConfigService;
 use EasyWeChat\Factory;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
@@ -34,10 +35,6 @@ class WeChat
     }
 
     protected static function config() : array {
-        return [
-            'app_id'        =>      'wxd4573d78c8dd5ee9',
-            'secret'        =>      'd0dc1a655a739b8ad5880af868221cfa',
-            'token'         =>      'test1234'
-        ];
+        return ConfigService::instance()->getWechatConfig();
     }
 }

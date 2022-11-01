@@ -250,3 +250,22 @@ CREATE TABLE `shop`.`user_address` (`address_id` INT NOT NULL AUTO_INCREMENT COM
 
 
 CREATE TABLE `shop`.`shop_order` (`order_id` INT NOT NULL AUTO_INCREMENT COMMENT '订单自增ID' , `user_id` INT NOT NULL COMMENT '用户UID' , `shop_id` INT NOT NULL COMMENT '商品ID' , `username` VARCHAR(255) NOT NULL COMMENT '用户名称' , `shop_name` VARCHAR(255) NOT NULL COMMENT '商品名称' , `order_number` CHAR(20) NOT NULL COMMENT '订单号' , `shop_price` FLOAT(10,2) NOT NULL COMMENT '商品价格' , `buy_number` INT NOT NULL DEFAULT '1' COMMENT '购买数量' , `total_price` FLOAT(10,2) NOT NULL COMMENT '订单金额' , `payed` INT NOT NULL DEFAULT '1' COMMENT '支付状态 1=待支付 0=已关闭 2=已支付' , `sended` INT NOT NULL DEFAULT '0' COMMENT '发货状态 0=未发货 1=已发货' , `status` INT NOT NULL DEFAULT '1' COMMENT '支付状态 1=等待支付 0=订单已关闭 2=等待发货 3=已经发货 4=订单完成' , `send_code` CHAR(255) NULL DEFAULT NULL COMMENT '发货详情' , `submited_time` INT NULL DEFAULT NULL COMMENT '下单时间' , `payed_time` INT NULL DEFAULT NULL COMMENT '支付时间' , `sended_time` INT NULL DEFAULT NULL COMMENT '发货时间' , `created_time` INT NULL DEFAULT NULL COMMENT '创建时间' , `updated_time` INT NULL DEFAULT NULL COMMENT '修改时间' , `deleted_time` INT NULL DEFAULT NULL COMMENT '删除时间' , PRIMARY KEY (`order_id`)) ENGINE = InnoDB;
+
+ALTER TABLE `user` ADD `deposit` FLOAT(10,2) NOT NULL COMMENT '保证金' AFTER `phone`;
+ALTER TABLE `user` CHANGE `deposit` `deposit` FLOAT(10,2) NOT NULL DEFAULT '0.00' COMMENT '保证金';
+ALTER TABLE `user` ADD `freeze_deposit` FLOAT(10,2) NOT NULL DEFAULT '0.00' COMMENT '冻结金额' AFTER `deposit`;
+
+
+-- create user_deposit
+CREATE TABLE IF NOT EXISTS `user_deposit` (
+    `deposit_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '记录ID',
+    `user_id` INT(10) UNSIGNED NOT NULL COMMENT '用户ID',
+    `amount` FLOAT(10,2) NOT NULL COMMENT '变动金额',
+    `type` INT(1) DEFAULT 1 COMMENT '押金变动类型 1=充值 2=冻结 3=解除冻结 4=提现',
+    `params` text DEFAULT NULL COMMENT '变动相关凭证',
+    `created_time` INT(10) DEFAULT NULL COMMENT '创建时间',
+    `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
+    `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
+    PRIMARY KEY (`deposit_id`)
+) comment='押金变动表';
+

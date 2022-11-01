@@ -19,4 +19,13 @@ class Server extends BaseSupportController
             'message'   =>  ConfigService::instance()->getNotice()
         ]);
     }
+
+    /**
+     * @ApiRouter(router="tel", method="get", intro="获取客服联系电话")
+     */
+    public function tel(){
+        return $this->success('获取客服联系电话成功', [
+            'message'   =>  ConfigService::instance()->getSystemTel()
+        ]);
+    }
 }
