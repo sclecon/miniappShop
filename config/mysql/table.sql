@@ -269,3 +269,17 @@ CREATE TABLE IF NOT EXISTS `user_deposit` (
     PRIMARY KEY (`deposit_id`)
 ) comment='押金变动表';
 
+-- create user_pay
+CREATE TABLE IF NOT EXISTS `user_pay` (
+    `pay_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '支付ID',
+    `user_id` INT(10) UNSIGNED NOT NULL COMMENT '用户ID',
+    `amount` FLOAT(10,2) NOT NULL COMMENT '支付金额',
+    `status` INT(1) DEFAULT 1 COMMENT '支付状态 1=等待支付 2=支付成功',
+    `type` CHAR(255) NOT NULL COMMENT '关联支付类型',
+    `order_id` CHAR(255) NOT NULL COMMENT '关联订单ID',
+    `created_time` INT(10) DEFAULT NULL COMMENT '创建时间',
+    `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
+    `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
+    PRIMARY KEY (`pay_id`)
+) comment='系统用户支付记录表';
+
