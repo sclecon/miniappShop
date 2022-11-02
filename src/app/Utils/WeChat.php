@@ -19,7 +19,9 @@ class WeChat
 
     public static function app() {
         if (is_null(self::$app)){
-            self::$app = Factory::officialAccount(self::config());
+            $config = self::config();
+            var_dump($config);
+            self::$app = Factory::officialAccount($config);
             $handler = new CoroutineHandler();
             $config = self::$app['config']->get('http', []);
             $config['handler'] = $stack = HandlerStack::create($handler);
