@@ -44,4 +44,9 @@ abstract class BaseSupportController
         $userId = $user ? $user['user_id'] : 1;
         return (int) $userId;
     }
+
+    protected function getAuthUserOpenId() : string {
+        $user = $this->request->getAttribute('user');
+        return $user ? $user['openid'] : 'test_openid';
+    }
 }

@@ -51,6 +51,7 @@ class Login extends BaseSupportController
         $user = $_SESSION['user'];
         unset($_SESSION['user']);
         $sign = UserService::instance()->getUserSign($user);
+        unset($user['openid']);
         return $this->success('获取用户签名成功', [
             'sign'  =>  $sign,
             'user'  =>  $user

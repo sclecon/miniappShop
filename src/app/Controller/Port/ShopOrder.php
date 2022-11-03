@@ -6,6 +6,7 @@ use App\Annotation\ApiRouter;
 use App\Annotation\Validator;
 use App\Controller\BaseSupport\BaseSupportController;
 use App\Services\ShopOrderService;
+use App\Services\UserPayService;
 
 /**
  * @ApiRouter(router="port/shop/order", method="get", intro="订单模块")
@@ -69,5 +70,22 @@ class ShopOrder extends BaseSupportController
         $orderNumber = $this->request->input('order_number');
         $detail = ShopOrderService::instance()->detail($userId, $orderNumber);
         return $this->success('获取订单详情成功', $detail);
+    }
+
+    /**
+     * @ApiRouter(router="pay", method="get", intro="获取支付配置")
+     * @Validator(attribute="order_number", required=false, rule="string", intro="订单号")
+     */
+    public function pay(){
+        $userId = $this->getAuthUserId();
+        $openId = $this->getAuthUserOpenId();
+        $orderNumber = $this->request->input('order_number');
+        $detail = ShopOrderService::instance()->detail($userId, $orderNumber);
+        $payParams = UserPayService::instance()->unify($userId, $openId, $orderNumber, $detail['total_price'], 'shopOrder');
+        return $this->success('获取支付配置成功', [
+            'payParams' =>  $payParams,
+            'amount'    =>  $detail['total_price'],
+            'name'      =>  $detail['shop_name'],
+        ]);
     }
 }

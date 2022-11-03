@@ -13,7 +13,7 @@ class UserService extends BaseSupportService
     public function getUserInfo(string $openid, string $nickname, string $avatar) : array {
         $user = $this->getModel()
             ->where('openid', $openid)
-            ->select(['user_id', 'avatar', 'username', 'intro', 'phone'])
+            ->select(['user_id', 'avatar', 'username', 'intro', 'phone', 'openid'])
             ->first();
         return $user ? $user->toArray() : $this->register($openid, $nickname, $avatar);
     }
@@ -27,7 +27,6 @@ class UserService extends BaseSupportService
             'phone'     =>  '',
         ];
         $user['user_id'] = $this->getModel()->add($user);
-        unset($user['openid']);
         return $user;
     }
 
