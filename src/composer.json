@@ -30,7 +30,7 @@
         "hyperf/process": "~2.2.0",
         "hyperf/redis": "~2.2.0",
         "hyperf/validation": "^2.2",
-        "overtrue/wechat": "4.5.0",
+        "overtrue/wechat": "~4.0",
         "sclecon/ucentor": "dev-main"
     },
     "require-dev": {

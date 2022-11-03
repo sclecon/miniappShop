@@ -7,6 +7,8 @@ use App\Annotation\Validator;
 use App\Controller\BaseSupport\BaseSupportController;
 use App\Services\UserService;
 use App\Utils\WeChat;
+use Hyperf\HttpServer\Response;
+use Hyperf\Utils\ApplicationContext;
 
 /**
  * @ApiRouter(router="port/login", method="get", intro="用户登录")
@@ -19,12 +21,11 @@ class Login extends BaseSupportController
      */
     public function getUrl(){
         $_SESSION['target_url'] = $this->request->input('target_url');
-        $redirect = urlencode(str_replace('url', 'index', $this->request->url()));
-        var_dump(urldecode($redirect));
+        $redirect = strtolower(str_replace('url', 'index', $this->request->url()));
         $url = WeChat::app()->oauth->scopes(['snsapi_userinfo'])->redirect($redirect)->getTargetUrl();
         return $this->success('获取登录链接成功', [
             'url'   =>  $url,
-            'redirect_uri'  =>  str_replace('url', 'index', $this->request->url()),
+            'redirect_uri'  =>  $redirect,
         ]);
     }
 
@@ -32,10 +33,12 @@ class Login extends BaseSupportController
      * @ApiRouter(router="index", method={"get", "post", "put"}, intro="执行登录请求")
      */
     public function index(){
+        $_GET['code'] = $this->request->input('code', '');
+        var_dump($_GET['code']);
         $user = WeChat::app()->oauth->user();
         $_SESSION['user'] = UserService::instance()->getUserInfo($user->getId(), $user->getName(), $user->getAvatar());
         $targetUrl = $_SESSION['target_url'] ?: '/';
-        return $this->response->redirect($targetUrl);
+        return ApplicationContext::getContainer()->get(Response::class)->redirect($targetUrl);
     }
 
     /**

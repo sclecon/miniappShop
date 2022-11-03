@@ -15,11 +15,7 @@ class UserService extends BaseSupportService
             ->where('openid', $openid)
             ->select(['user_id', 'avatar', 'username', 'intro', 'phone'])
             ->first();
-        $user = $user->toArray();
-        if (!$user){
-            $user = $this->register($openid, $nickname, $avatar);
-        }
-        return $user;
+        return $user ? $user->toArray() : $this->register($openid, $nickname, $avatar);
     }
 
     protected function register(string $openid, string $nickname, string $avatar) : array {
