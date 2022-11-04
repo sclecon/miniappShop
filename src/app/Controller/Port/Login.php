@@ -23,6 +23,7 @@ class Login extends BaseSupportController
         $_SESSION['target_url'] = $this->request->input('target_url');
         $redirect = strtolower(str_replace('url', 'index', $this->request->url()));
         $url = WeChat::app()->oauth->scopes(['snsapi_userinfo'])->redirect($redirect)->getTargetUrl();
+        return ApplicationContext::getContainer()->get(Response::class)->redirect($url);
         return $this->success('获取登录链接成功', [
             'url'   =>  $url,
             'redirect_uri'  =>  $redirect,
@@ -34,11 +35,12 @@ class Login extends BaseSupportController
      */
     public function index(){
         $_POST['code'] = $_GET['code'] = $this->request->input('code', '');
-        $_POST['state'] = $_GET['code'] = $this->request->input('state', '');
+        $_POST['state'] = $_GET['state'] = $this->request->input('state', '');
         var_dump($_GET);
+
         $user = WeChat::app()->oauth->user();
         $_SESSION['user'] = UserService::instance()->getUserInfo($user->getId(), $user->getName(), $user->getAvatar());
-        $targetUrl = $_SESSION['target_url'] ?: '/';
+        $targetUrl = isset($_SESSION['target_url']) ? $_SESSION['target_url']: '/';
         return ApplicationContext::getContainer()->get(Response::class)->redirect($targetUrl);
     }
 
