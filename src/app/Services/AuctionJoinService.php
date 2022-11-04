@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exception\Service\AuctionJoinServiceException;
 use App\Model\AuctionJoinModel;
 use App\Services\BaseSupport\BaseSupportService;
+use App\Utils\ArrayExpand;
 use App\Utils\Http;
 
 class AuctionJoinService extends BaseSupportService
@@ -46,27 +47,26 @@ class AuctionJoinService extends BaseSupportService
         return $list;
     }
 
-    public function userJoinList(int $userId, int $auctionId, int $page, int $number){
+    public function userJoinList(int $userId, int $status, int $page, int $number){
         $auction = AuctionService::instance()->getModel();
         $auctionImage = AuctionImageService::instance()->getModel();
         $list = $this->getModel()
-            ->where($this->getModel()->getTableKey('user_id'), $userId)
-            ->where($this->getModel()->getTableKey('auction_id'), $auctionId)
-            ->orderByDesc($this->getModel()->getTableKey('join_id'))
-            ->join($auction->getTable(), $auction->getTableKey('auction_id'), $this->getModel()->getTableKey('auction_id'))
-            ->join($auctionImage->getTable(), $auctionImage->getTableKey('auction_id'), $this->getModel()->getTableKey('auction_id'))
+            ->where($this->getModel()->getTableKey('user_id'), $userId);
+        if ($status != 999){
+            $list = $list->where($this->getModel()->getTableKey('status'), $status);
+        }
+        $list = $list->orderByDesc($this->getModel()->getTableKey('join_id'))
             ->forPage($page, $number)
             ->select([
                 $this->getModel()->getTableKey('*'),
-                $auction->getTableKey('name'),
-                $auction->getTableKey('intro'),
-                $auctionImage->getTableKey('url as image'),
             ])
             ->get()
             ->toArray();
+        $auctionId = ArrayExpand::getKeys($list, 'auction_id');
+        $auctionNames = AuctionService::instance()->getAuctionListInAuctionIds($auctionId);
         foreach ($list as $key => $value){
             $value['created_time'] = date('Y-m-d H:i:s', $value['created_time']);
-            $value['image'] = Http::instance()->image($value['image']);
+            $value['auction'] = isset($auctionNames[$value['auction_id']]) ? $auctionNames[$value['auction_id']] : [];
             $list[$key] = $value;
         }
         return $list;
