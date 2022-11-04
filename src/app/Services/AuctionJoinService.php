@@ -46,10 +46,11 @@ class AuctionJoinService extends BaseSupportService
         return $list;
     }
 
-    public function userJoinList(int $auctionId, int $page, int $number){
+    public function userJoinList(int $userId, int $auctionId, int $page, int $number){
         $auction = AuctionService::instance()->getModel();
         $auctionImage = AuctionImageService::instance()->getModel();
         $list = $this->getModel()
+            ->where($this->getModel()->getTableKey('user_id'), $userId)
             ->where($this->getModel()->getTableKey('auction_id'), $auctionId)
             ->orderByDesc($this->getModel()->getTableKey('join_id'))
             ->join($auction->getTable(), $auction->getTableKey('auction_id'), $this->getModel()->getTableKey('auction_id'))

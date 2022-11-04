@@ -53,11 +53,12 @@ class User extends BaseSupportController
      * @Validator(attribute="number", required=false, rule="integer", intro="每页数量")
      */
     public function list(){
+        $userId = $this->getAuthUserId();
         $status = (int) $this->request->input('status', 999);
         $page = (int) $this->request->input('page', 1);
         $number = (int) $this->request->input('number', 20);
         return $this->success('获取我的竞拍记录成功', [
-            'list'   =>   AuctionJoinService::instance()->userJoinList($status, $page, $number)
+            'list'   =>   AuctionJoinService::instance()->userJoinList($userId, $status, $page, $number)
         ]);
     }
 }
