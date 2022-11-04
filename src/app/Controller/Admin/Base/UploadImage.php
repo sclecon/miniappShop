@@ -73,7 +73,9 @@ class UploadImage extends BaseCurd
         $extType = explode('/', $file->getMimeType());
         $extType = $extType[1];
         if (in_array($extType, $this->imageTypes) === false){
-            return $this->error('必须上传图片文件【png或jpeg格式】');
+            return $this->error('必须上传图片文件【png或jpeg格式】', [
+                'type'  =>  $extType
+            ]);
         }
         $formData[$this->imageField] = Image::instance()->upload($file, $this->imageModule);
         $insertId = $this->model->add($formData);
@@ -102,7 +104,9 @@ class UploadImage extends BaseCurd
             $extType = explode('/', $file->getMimeType());
             $extType = $extType[1];
             if (in_array($extType, $this->imageTypes) === false){
-                return $this->error('必须上传图片文件【png或jpeg格式】');
+                return $this->error('必须上传图片文件【png或jpeg格式】', [
+                    'type'  =>  $extType
+                ]);
             }
             $formData[$this->imageField] = Image::instance()->upload($file, $this->imageModule);
         }
