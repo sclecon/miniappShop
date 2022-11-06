@@ -17,6 +17,7 @@ services:
       - "./src:/opt/www"
     entrypoint: "top"
     restart: always
+    platform: linux/x86_64
   redis:
     image: redis:latest
     container_name: 'shop-redis'

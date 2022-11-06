@@ -20,6 +20,7 @@ class WeChat
     public static function app() {
         if (is_null(self::$app)){
             $config = self::config();
+            var_dump($config);
             self::$app = Factory::officialAccount($config);
             $handler = new CoroutineHandler();
             $config = self::$app['config']->get('http', []);
