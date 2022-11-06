@@ -7,6 +7,8 @@ use App\Annotation\Validator;
 use App\Controller\BaseSupport\BaseSupportController;
 use App\Services\UserService;
 use App\Utils\WeChat;
+use Hyperf\Contract\SessionInterface;
+use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Response;
 use Hyperf\Utils\ApplicationContext;
 
@@ -15,19 +17,23 @@ use Hyperf\Utils\ApplicationContext;
  */
 class Login extends BaseSupportController
 {
+
+
+    /**
+     * @Inject()
+     * @var SessionInterface
+     */
+    protected $session;
+
     /**
      * @ApiRouter(router="url", method="get", intro="获取登录链接")
      * @Validator(attribute="target_url", required=true, rule="string", intro="回调地址")
      */
     public function getUrl(){
-        $_SESSION['target_url'] = $this->request->input('target_url');
+        $this->session->set('target_url', $this->request->input('target_url', '/'));
         $redirect = strtolower(str_replace('url', 'index', $this->request->url()));
         $url = WeChat::app()->oauth->scopes(['snsapi_userinfo'])->redirect($redirect)->getTargetUrl();
         return ApplicationContext::getContainer()->get(Response::class)->redirect($url);
-        return $this->success('获取登录链接成功', [
-            'url'   =>  $url,
-            'redirect_uri'  =>  $redirect,
-        ]);
     }
 
     /**
@@ -39,8 +45,8 @@ class Login extends BaseSupportController
         var_dump($_GET);
 
         $user = WeChat::app()->oauth->user();
-        $_SESSION['user'] = UserService::instance()->getUserInfo($user->getId(), $user->getName(), $user->getAvatar());
-        $targetUrl = isset($_SESSION['target_url']) ? $_SESSION['target_url']: '/';
+        $this->session->set('user', UserService::instance()->getUserInfo($user->getId(), $user->getName(), $user->getAvatar()));
+        $targetUrl = $this->session->get('target_url', '/');
         return ApplicationContext::getContainer()->get(Response::class)->redirect($targetUrl);
     }
 
@@ -48,11 +54,11 @@ class Login extends BaseSupportController
      * @ApiRouter(router="user/sign", method="get", intro="获取用户身份签名")
      */
     public function getUserSign(){
-        if (!$_SESSION['user']){
+        $user = $this->session->get('user', []);
+        if (!$user){
             return $this->error('用户未登录账号');
         }
-        $user = $_SESSION['user'];
-        unset($_SESSION['user']);
+        $this->session->remove('user');
         $sign = UserService::instance()->getUserSign($user);
         unset($user['openid']);
         return $this->success('获取用户签名成功', [

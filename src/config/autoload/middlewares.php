@@ -13,5 +13,6 @@ return [
     'http' => [
         \App\Middleware\CorsMiddleware::class,
         \App\Middleware\Annotation\ValidatorMiddleware::class,
+        \Hyperf\Session\Middleware\SessionMiddleware::class,
     ],
 ];

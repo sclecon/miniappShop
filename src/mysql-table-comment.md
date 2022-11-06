@@ -29,6 +29,7 @@ ptx_user 系统用户
 
 ptx_usergroup 用户组
 
+https://nwl60e1e.mirror.aliyuncs.com
 
 
 

@@ -29,6 +29,7 @@
         "hyperf/memory": "~2.2.0",
         "hyperf/process": "~2.2.0",
         "hyperf/redis": "~2.2.0",
+        "hyperf/session": "^2.2",
         "hyperf/validation": "^2.2",
         "overtrue/wechat": "~4.0",
         "sclecon/ucentor": "dev-main"

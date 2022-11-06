@@ -31,7 +31,7 @@ class User extends BaseSupportController
     }
 
     /**
-     * @ApiRouter(router="deposit/log", method="get", intro="获取用户保证金")
+     * @ApiRouter(router="deposit/log", method="get", intro="保证金收支记录")
      * @Validator(attribute="type", required=false, rule="integer", intro="记录类型")
      * @Validator(attribute="page", required=false, rule="integer", intro="分页")
      * @Validator(attribute="number", required=false, rule="integer", intro="每页数量")
