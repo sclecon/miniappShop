@@ -47,7 +47,7 @@ class Login extends BaseSupportController
             return $this->error('无有效参数');
         }
 
-        $user = WeChat::app()->auth->session($code);
+        $user = WeChat::app()->oauth->user();
         $this->session->set('user', UserService::instance()->getUserInfo($user->getId(), $user->getName(), $user->getAvatar()));
         $targetUrl = $this->session->get('target_url', '/');
         return ApplicationContext::getContainer()->get(Response::class)->redirect($targetUrl);
