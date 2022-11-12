@@ -40,21 +40,21 @@ class WeChat
                 'handler' => $stack,
             ]);
 
-            $request = ApplicationContext::getContainer()->get(RequestInterface::class);
+            $hyperfRequest = ApplicationContext::getContainer()->get(RequestInterface::class);
 
-            $get = $request->getQueryParams();
-            $post = $request->getParsedBody();
-            $cookie = $request->getCookieParams();
-            $uploadFiles = $request->getUploadedFiles() ?? [];
-            $server = $request->getServerParams();
-            $xml = $request->getBody()->getContents();
+            $get = $hyperfRequest->getQueryParams();
+            $post = $hyperfRequest->getParsedBody();
+            $cookie = $hyperfRequest->getCookieParams();
+            $uploadFiles = $hyperfRequest->getUploadedFiles() ?? [];
+            $server = $hyperfRequest->getServerParams();
+            $xml = $hyperfRequest->getBody()->getContents();
             $files = [];
             /** @var \Hyperf\HttpMessage\Upload\UploadedFile $v */
             foreach ($uploadFiles as $k => $v) {
                 $files[$k] = $v->toArray();
             }
             $request = new Request($get, $post, [], $cookie, $files, $server, $xml);
-            $request->headers = new HeaderBag($request->getHeaders());
+            $request->headers = new HeaderBag($hyperfRequest->getHeaders());
             $app->rebind('request', $request);
 
             self::$app = $app;
