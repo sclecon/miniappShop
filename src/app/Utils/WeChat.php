@@ -52,7 +52,7 @@ class WeChat
             $files = $request->getUploadedFiles();
             $server = $request->getServerParams();
             $xml = $request->getBody()->getContents();
-            $app['request'] = new \GuzzleHttp\Psr7\Request($get, $post, [], $cookie, $files, $server, $xml);
+            // $app['request'] = new \GuzzleHttp\Psr7\Request($get, $post, [], $cookie, $files, $server, $xml);
             self::$app = $app;
         }
         return self::$app;
