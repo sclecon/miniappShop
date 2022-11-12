@@ -43,6 +43,7 @@ class Login extends BaseSupportController
     public function index(){
         $_POST['code'] = $_GET['code'] = $this->request->input('code', '');
         $_POST['state'] = $_GET['state'] = $this->request->input('state', '');
+        var_dump($this->request->all());
         var_dump($_GET);
 
         $user = WeChat::app()->oauth->user();
