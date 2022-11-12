@@ -50,6 +50,7 @@ class Login extends BaseSupportController
         $user = WeChat::app()->oauth->user();
         $this->session->set('user', UserService::instance()->getUserInfo($user->getId(), $user->getName(), $user->getAvatar()));
         $targetUrl = $this->session->get('target_url', '/');
+
         return ApplicationContext::getContainer()->get(Response::class)->redirect($targetUrl);
     }
 

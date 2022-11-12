@@ -9,6 +9,7 @@ use EasyWeChat\Factory;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use Hyperf\Guzzle\CoroutineHandler;
+use Psr\SimpleCache\CacheInterface;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -25,19 +26,7 @@ class WeChat
             $app = Factory::officialAccount(self::config());
             $handler = new CoroutineHandler();
 
-            $config = $app['config']->get('http', []);
-            $config['handler'] = $stack = HandlerStack::create($handler);
-            $app->rebind('http_client', new Client($config));
-
-            $app['guzzle_handler'] = $handler;
-
-            $app->oauth->setGuzzleOptions([
-                'http_errors' => false,
-                'handler' => $stack,
-            ]);
-
             $hyperfRequest = ApplicationContext::getContainer()->get(RequestInterface::class);
-
             $get = $hyperfRequest->getQueryParams();
             $post = $hyperfRequest->getParsedBody();
             $cookie = $hyperfRequest->getCookieParams();
@@ -54,6 +43,18 @@ class WeChat
             $request = new Request($get, $post, [], $cookie, $files, $server, $xml);
             $request->headers = new HeaderBag($hyperfRequest->getHeaders());
             $app->rebind('request', $request);
+            $app['cache'] = ApplicationContext::getContainer()->get(CacheInterface::class);
+
+            $config = $app['config']->get('http', []);
+            $config['handler'] = $stack = HandlerStack::create($handler);
+            $app->rebind('http_client', new Client($config));
+
+            $app['guzzle_handler'] = $handler;
+
+            $app->oauth->setGuzzleOptions([
+                'http_errors' => false,
+                'handler' => $stack,
+            ]);
 
             self::$app = $app;
         }
