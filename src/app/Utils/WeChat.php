@@ -22,7 +22,7 @@ class WeChat
     public static function app() {
         if (is_null(self::$app)){
 
-            $app = Factory::officialAccount(ConfigService::instance()->getWechatConfig());
+            $app = Factory::officialAccount(self::config());
             $handler = new CoroutineHandler();
 
             $config = $app['config']->get('http', []);
