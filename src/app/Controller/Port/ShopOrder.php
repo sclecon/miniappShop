@@ -7,9 +7,10 @@ use App\Annotation\Validator;
 use App\Controller\BaseSupport\BaseSupportController;
 use App\Services\ShopOrderService;
 use App\Services\UserPayService;
+use App\Middleware\User\AuthenticationMiddleware;
 
 /**
- * @ApiRouter(router="port/shop/order", method="get", intro="订单模块")
+ * @ApiRouter(router="port/shop/order", method="get", intro="订单模块", middleware={AuthenticationMiddleware::class})
  */
 class ShopOrder extends BaseSupportController
 {

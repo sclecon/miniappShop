@@ -5,9 +5,10 @@ namespace App\Controller\Port;
 use App\Annotation\ApiRouter;
 use App\Controller\BaseSupport\BaseSupportController;
 use App\Services\ConfigService;
+use App\Middleware\User\AuthenticationMiddleware;
 
 /**
- * @ApiRouter(router="port/server", method="get", intro="系统相关")
+ * @ApiRouter(router="port/server", method="get", intro="系统相关", middleware={AuthenticationMiddleware::class})
  */
 class Server extends BaseSupportController
 {

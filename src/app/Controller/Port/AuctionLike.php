@@ -6,9 +6,10 @@ use App\Annotation\ApiRouter;
 use App\Annotation\Validator;
 use App\Controller\BaseSupport\BaseSupportController;
 use App\Services\AuctionLikeService;
+use App\Middleware\User\AuthenticationMiddleware;
 
 /**
- * @ApiRouter(router="port/auction/like", method="get", intro="拍品喜欢")
+ * @ApiRouter(router="port/auction/like", method="get", intro="拍品喜欢", middleware={AuthenticationMiddleware::class})
  */
 class AuctionLike extends BaseSupportController
 {

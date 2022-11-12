@@ -6,9 +6,10 @@ use App\Annotation\ApiRouter;
 use App\Annotation\Validator;
 use App\Controller\BaseSupport\BaseSupportController;
 use App\Services\AuctionJoinService;
+use App\Middleware\User\AuthenticationMiddleware;
 
 /**
- * @ApiRouter(router="port/auction/join", method="get", intro="拍卖")
+ * @ApiRouter(router="port/auction/join", method="get", intro="拍卖", middleware={AuthenticationMiddleware::class})
  */
 class AuctionJoin extends BaseSupportController
 {

@@ -6,9 +6,10 @@ use App\Annotation\ApiRouter;
 use App\Annotation\Validator;
 use App\Controller\BaseSupport\BaseSupportController;
 use App\Services\UserAddressService;
+use App\Middleware\User\AuthenticationMiddleware;
 
 /**
- * @ApiRouter(router="port/user/address", method="get", intro="用户收货地址")
+ * @ApiRouter(router="port/user/address", method="get", intro="用户收货地址", middleware={AuthenticationMiddleware::class})
  */
 class UserAddress extends BaseSupportController
 {

@@ -15,9 +15,10 @@ use App\Controller\BaseSupport\BaseSupportController;
 use App\Services\AuctionJoinService;
 use App\Services\UserDepositService;
 use App\Services\UserService;
+use App\Middleware\User\AuthenticationMiddleware;
 
 /**
- * @ApiRouter(router="port/user", method="get", intro="用户相关")
+ * @ApiRouter(router="port/user", method="get", intro="用户相关", middleware={AuthenticationMiddleware::class})
  */
 class User extends BaseSupportController
 {

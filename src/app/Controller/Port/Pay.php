@@ -11,9 +11,10 @@ namespace App\Controller\Port;
 
 use App\Annotation\ApiRouter;
 use App\Controller\BaseSupport\BaseSupportController;
+use App\Middleware\User\AuthenticationMiddleware;
 
 /**
- * @ApiRouter(router="port/login", method="get", intro="用户登录")
+ * @ApiRouter(router="port/pay", method="get", intro="支付相关", middleware={AuthenticationMiddleware::class})
  */
 class Pay extends BaseSupportController
 {
