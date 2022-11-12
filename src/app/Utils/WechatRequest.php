@@ -33,4 +33,8 @@ class WechatRequest
         return $this->request->getBody()
             ->getContents();
     }
+
+    function getSchemeAndHttpHost(){
+        return Http::instance()->getDomain();
+    }
 }
