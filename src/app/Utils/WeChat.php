@@ -10,9 +10,9 @@ use Hyperf\Devtool\Adapter\AbstractAdapter;
 use Hyperf\Guzzle\CoroutineHandler;
 use Hyperf\Guzzle\HandlerStackFactory;
 use Hyperf\HttpServer\Contract\RequestInterface;
-use Hyperf\HttpServer\Request;
 use Hyperf\Utils\ApplicationContext;
 use Psr\SimpleCache\CacheInterface;
+use Overtrue\Socialite\Providers\AbstractProvider;
 
 class WeChat
 {
@@ -40,10 +40,10 @@ class WeChat
             $config['handler'] = ApplicationContext::getContainer()->get(HandlerStackFactory::class)->create();
             $app->rebind('http_client', new Client($config));
             $app['guzzle_handler'] = new CoroutineHandler();
-//            AbstractAdapter::setGuzzleOptions([
-//                'http_errors' => false,
-//                'handler' => HandlerStack::create(new CoroutineHandler())
-//            ]);
+            AbstractProvider::setGuzzleOptions([
+                'http_errors' => false,
+                'handler' => HandlerStack::create(new CoroutineHandler())
+            ]);
             $app['cache'] = ApplicationContext::getContainer()->get(CacheInterface::class);
             $request = ApplicationContext::getContainer()->get(RequestInterface::class);
             $get = $request->getQueryParams();
