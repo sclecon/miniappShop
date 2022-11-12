@@ -9,7 +9,7 @@ class WechatRequest
 {
     /**
      * @Inject()
-     * @var RequestInterface
+     * @var
      */
     protected $request;
 
