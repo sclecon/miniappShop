@@ -41,11 +41,7 @@ class Login extends BaseSupportController
      * @ApiRouter(router="index", method={"get", "post", "put"}, intro="执行登录请求")
      */
     public function index(){
-        $_POST['code'] = $_GET['code'] = $this->request->input('code', '');
-        $_POST['state'] = $_GET['state'] = $this->request->input('state', '');
         var_dump($this->request->all());
-        var_dump($_GET);
-
         $user = WeChat::app()->oauth->user();
         $this->session->set('user', UserService::instance()->getUserInfo($user->getId(), $user->getName(), $user->getAvatar()));
         $targetUrl = $this->session->get('target_url', '/');
