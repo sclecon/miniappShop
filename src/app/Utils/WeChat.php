@@ -36,22 +36,10 @@ class WeChat
 //            self::$app['cache'] = ApplicationContext::getContainer()->get(CacheInterface::class);
 
             $app = Factory::officialAccount(self::config());
-            $config = $app['config']->get('http', []);
-            $config['handler'] = ApplicationContext::getContainer()->get(HandlerStackFactory::class)->create();
-            $app->rebind('http_client', new Client($config));
-            $app['guzzle_handler'] = new CoroutineHandler();
             AbstractProvider::setGuzzleOptions([
                 'http_errors' => false,
                 'handler' => HandlerStack::create(new CoroutineHandler())
             ]);
-            $app['cache'] = ApplicationContext::getContainer()->get(CacheInterface::class);
-            $request = ApplicationContext::getContainer()->get(RequestInterface::class);
-            $get = $request->getQueryParams();
-            $post = $request->getParsedBody();
-            $cookie = $request->getCookieParams();
-            $files = $request->getUploadedFiles();
-            $server = $request->getServerParams();
-            $xml = $request->getBody()->getContents();
             $app['request'] = new WechatRequest();
             self::$app = $app;
         }
