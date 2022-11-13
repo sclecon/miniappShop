@@ -31,6 +31,7 @@ class AuthenticationMiddleware implements MiddlewareInterface
             // return $handler->handle($request);
         }
         $user = $this->portUser->decode($request->getHeader($this->authentication)[0]);
+        $request = $request->withAttribute('user', $user);
         $request = $request->withAttribute('user_id', $user['user_id']);
         return $handler->handle($request);
     }

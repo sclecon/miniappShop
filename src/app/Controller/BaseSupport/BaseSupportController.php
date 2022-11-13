@@ -41,6 +41,7 @@ abstract class BaseSupportController
 
     protected function getAuthUserId() : int {
         $user = $this->request->getAttribute('user');
+        var_dump($user);
         $userId = $user ? $user['user_id'] : 1;
         return (int) $userId;
     }
