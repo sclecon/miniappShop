@@ -31,6 +31,7 @@ class Login extends BaseSupportController
      */
     public function getUrl(){
         $this->session->set('target_url', $this->request->input('target_url', '/'));
+        var_dump($this->session->get('target_url'));
         $redirect = strtolower(str_replace('url', 'index', $this->request->url()));
         $url = WeChat::app()->oauth->scopes(['snsapi_userinfo'])->redirect($redirect)->getTargetUrl();
         if ($this->request->input('to', false) === 'yes'){
@@ -50,6 +51,8 @@ class Login extends BaseSupportController
         if ($code === false){
             return $this->error('无有效参数');
         }
+
+        var_dump($this->session->all());
 
         $user = WeChat::app()->oauth->user();
         $this->session->set('user', UserService::instance()->getUserInfo($user->getId(), $user->getName(), $user->getAvatar()));
