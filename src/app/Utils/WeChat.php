@@ -21,7 +21,7 @@ class WeChat
     private static $app;
 
     public static function app() {
-        if (is_null(self::$app)){
+        if (is_null(self::$app) or true){
 
             $app = Factory::officialAccount(self::config());
             $handler = new CoroutineHandler();
