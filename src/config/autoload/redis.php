@@ -12,7 +12,7 @@ declare(strict_types=1);
 return [
     'default' => [
         'host' => env('REDIS_HOST', 'redis'),
-        'auth' => env('REDIS_AUTH', null),
+        'auth' => env('REDIS_AUTH', 'REDIS-PASSWORD-SHOP'),
         'port' => (int) env('REDIS_PORT', 6379),
         'db' => (int) env('REDIS_DB', 0),
         'pool' => [
