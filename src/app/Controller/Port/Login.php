@@ -62,7 +62,7 @@ class Login extends BaseSupportController
         }
 
         $user = WeChat::app()->oauth->user();
-        $this->session->set('user', UserService::instance()->getUserInfo($user->getId(), $user->getName(), $user->getAvatar()));
+        $this->redis->set(Http::instance()->getRequestUserName().'_userinfo', serialize(UserService::instance()->getUserInfo($user->getId(), $user->getName(), $user->getAvatar())));
         $targetUrl = $this->redis->get(Http::instance()->getRequestUserName().'_target_url');
         var_dump($targetUrl);
 
@@ -73,11 +73,12 @@ class Login extends BaseSupportController
      * @ApiRouter(router="user/sign", method="get", intro="获取用户身份签名")
      */
     public function getUserSign(){
-        $user = $this->session->get('user', []);
+        $user = $this->redis->get(Http::instance()->getRequestUserName().'_userinfo');
         if (!$user){
             return $this->error('用户未登录账号');
         }
-        $this->session->remove('user');
+        $this->redis->del('user');
+        $user = unserialize($user);
         $sign = UserService::instance()->getUserSign($user);
         unset($user['openid']);
         return $this->success('获取用户签名成功', [
