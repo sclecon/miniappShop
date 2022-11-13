@@ -15,51 +15,45 @@ use Symfony\Component\HttpFoundation\Request;
 
 class WeChatPayment
 {
-    /**
-     * @var null
-     */
-    private static $app;
 
     public static function app() {
-        if (is_null(self::$app)){
 
-            var_dump(self::config());
-            $app = Factory::payment(self::config());
-            $handler = new CoroutineHandler();
+        $config = self::config();
+        var_dump($config);
+        $app = Factory::payment($config);
+        $handler = new CoroutineHandler();
 
-            $hyperfRequest = ApplicationContext::getContainer()->get(RequestInterface::class);
-            $get = $hyperfRequest->getQueryParams();
-            $post = $hyperfRequest->getParsedBody();
-            $cookie = $hyperfRequest->getCookieParams();
-            $uploadFiles = $hyperfRequest->getUploadedFiles() ?? [];
-            $server = $hyperfRequest->getServerParams();
-            $xml = $hyperfRequest->getBody()->getContents();
-            $files = [];
+        $hyperfRequest = ApplicationContext::getContainer()->get(RequestInterface::class);
+        $get = $hyperfRequest->getQueryParams();
+        $post = $hyperfRequest->getParsedBody();
+        $cookie = $hyperfRequest->getCookieParams();
+        $uploadFiles = $hyperfRequest->getUploadedFiles() ?? [];
+        $server = $hyperfRequest->getServerParams();
+        $xml = $hyperfRequest->getBody()->getContents();
+        $files = [];
 
-            /** @var \Hyperf\HttpMessage\Upload\UploadedFile $v */
-            foreach ($uploadFiles as $k => $v) {
-                $files[$k] = $v->toArray();
-            }
-
-            $request = new Request($get, $post, [], $cookie, $files, $server, $xml);
-            $request->headers = new HeaderBag($hyperfRequest->getHeaders());
-            $app->rebind('request', $request);
-            $app['cache'] = ApplicationContext::getContainer()->get(CacheInterface::class);
-
-            $config = $app['config']->get('http', []);
-            $config['handler'] = $stack = HandlerStack::create($handler);
-            $app->rebind('http_client', new Client($config));
-
-            $app['guzzle_handler'] = $handler;
-
-            $app->oauth->setGuzzleOptions([
-                'http_errors' => false,
-                'handler' => $stack,
-            ]);
-
-            self::$app = $app;
+        /** @var \Hyperf\HttpMessage\Upload\UploadedFile $v */
+        foreach ($uploadFiles as $k => $v) {
+            $files[$k] = $v->toArray();
         }
-        return self::$app;
+
+        $request = new Request($get, $post, [], $cookie, $files, $server, $xml);
+        $request->headers = new HeaderBag($hyperfRequest->getHeaders());
+        $app->rebind('request', $request);
+        $app['cache'] = ApplicationContext::getContainer()->get(CacheInterface::class);
+
+        $config = $app['config']->get('http', []);
+        $config['handler'] = $stack = HandlerStack::create($handler);
+        $app->rebind('http_client', new Client($config));
+
+        $app['guzzle_handler'] = $handler;
+
+        $app->oauth->setGuzzleOptions([
+            'http_errors' => false,
+            'handler' => $stack,
+        ]);
+
+        return $app;
     }
 
     protected static function config() : array {
