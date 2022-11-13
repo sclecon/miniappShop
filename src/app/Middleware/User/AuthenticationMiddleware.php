@@ -28,6 +28,7 @@ class AuthenticationMiddleware implements MiddlewareInterface
         if ($request->hasHeader($this->authentication) === false){
             var_dump('User Authentication parameter must be passed');
             // throw new AuthenticationException('User Authentication parameter must be passed');
+            return $handler->handle($request);
         }
         $user = $this->portUser->decode($request->getHeader($this->authentication)[0]);
         $request = $request->withAttribute('user_id', $user['user_id']);

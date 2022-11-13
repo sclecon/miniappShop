@@ -75,14 +75,15 @@ class ShopOrder extends BaseSupportController
 
     /**
      * @ApiRouter(router="pay", method="get", intro="获取支付配置")
-     * @Validator(attribute="order_number", required=false, rule="string", intro="订单号")
+     * @Validator(attribute="order_number", required=true, rule="string", intro="订单号")
      */
     public function pay(){
         $userId = $this->getAuthUserId();
         $openId = $this->getAuthUserOpenId();
         $orderNumber = $this->request->input('order_number');
         $detail = ShopOrderService::instance()->detail($userId, $orderNumber);
-        $payParams = UserPayService::instance()->unify($userId, $openId, $orderNumber, $detail['total_price'], 'shopOrder');
+        $title = '购买商品:'.$detail['shop_name'];
+        $payParams = UserPayService::instance()->unify($userId, $openId, $orderNumber, $detail['total_price'], 'shopOrder', $title);
         return $this->success('获取支付配置成功', [
             'payParams' =>  $payParams,
             'amount'    =>  $detail['total_price'],

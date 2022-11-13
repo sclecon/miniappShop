@@ -33,16 +33,28 @@ class ConfigService extends BaseSupportService
     }
 
     public function getWechatPayConfig() : array {
+        $appid = $this->getConfig('wx_appid', false);
         $mid = $this->getConfig('wx_pay_mid', false);
         $secret = $this->getConfig('wx_pay_secret', false);
-        if (!$mid){
+
+        if (!$appid){
+            throw new ConfigServiceException('公众号APPID错误');
+        } elseif (!$mid){
             throw new ConfigServiceException('微信支付商户ID错误');
         } elseif (!$secret){
             throw new ConfigServiceException('微信支付商户密钥错误');
         }
+
+        $certDir = __DIR__.'/../../cert/';
+
+        var_dump(scandir($certDir));
+
         return [
-            'mid'       =>  $mid,
-            'secret'    =>  $secret
+            'app_id'    =>  $appid,
+            'mch_id'    =>  $mid,
+            'key'       =>  $secret,
+            'cert_path' =>  $certDir.'apiclient_cert.pem',
+            'key_path' =>  $certDir.'apiclient_key.pem',
         ];
     }
 
