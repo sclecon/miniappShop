@@ -33,7 +33,10 @@ class Login extends BaseSupportController
         $this->session->set('target_url', $this->request->input('target_url', '/'));
         $redirect = strtolower(str_replace('url', 'index', $this->request->url()));
         $url = WeChat::app()->oauth->scopes(['snsapi_userinfo'])->redirect($redirect)->getTargetUrl();
-        return ApplicationContext::getContainer()->get(Response::class)->redirect($url);
+        return $this->success('获取登录链接成功', [
+            'url'   =>  $url
+        ]);
+        // return ApplicationContext::getContainer()->get(Response::class)->redirect($url);
     }
 
     /**
