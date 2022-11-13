@@ -39,4 +39,22 @@ class Http
     public function image(string $url) : string {
         return strpos($url, 'http') === 0 ? $url : Http::instance()->getDomain().$url;
     }
+
+    public function getClientIp() : string {
+        $res = $this->request->getServerParams();
+        if(isset($res['http_client_ip'])){
+            return $res['http_client_ip'];
+        }elseif(isset($res['http_x_real_ip'])){
+            return $res['http_x_real_ip'];
+        }elseif(isset($res['http_x_forwarded_for'])){
+            $arr = explode(',',$res['http_x_forwarded_for']);
+            return $arr[0];
+        }else{
+            return $res['remote_addr'];
+        }
+    }
+
+    public function getRequestUserName() : string {
+        return substr(md5($this->getClientIp()), 12, 8);
+    }
 }

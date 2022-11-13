@@ -6,10 +6,12 @@ use App\Annotation\ApiRouter;
 use App\Annotation\Validator;
 use App\Controller\BaseSupport\BaseSupportController;
 use App\Services\UserService;
+use App\Utils\Http;
 use App\Utils\WeChat;
 use Hyperf\Contract\SessionInterface;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Response;
+use Hyperf\Redis\Redis;
 use Hyperf\Utils\ApplicationContext;
 
 /**
@@ -26,17 +28,24 @@ class Login extends BaseSupportController
     protected $session;
 
     /**
+     * @Inject()
+     * @var Redis
+     */
+    protected $redis;
+
+    /**
      * @ApiRouter(router="url", method="get", intro="获取登录链接")
      * @Validator(attribute="target_url", required=true, rule="string", intro="回调地址")
      */
     public function getUrl(){
-        $this->session->set('target_url', $this->request->input('target_url', '/'));
-        var_dump($this->session->get('target_url'));
+        $this->redis->set(Http::instance()->getRequestUserName().'_target_url', $this->request->input('target_url', '/'));
+        var_dump($this->redis->get(Http::instance()->getRequestUserName().'_target_url'));
         $redirect = strtolower(str_replace('url', 'index', $this->request->url()));
         $url = WeChat::app()->oauth->scopes(['snsapi_userinfo'])->redirect($redirect)->getTargetUrl();
         if ($this->request->input('to', false) === 'yes'){
             return ApplicationContext::getContainer()->get(Response::class)->redirect($url);
         }
+
         return $this->success('获取登录链接成功', [
             'url'   =>  $url
         ]);
@@ -52,11 +61,10 @@ class Login extends BaseSupportController
             return $this->error('无有效参数');
         }
 
-        var_dump($this->session->all());
-
         $user = WeChat::app()->oauth->user();
         $this->session->set('user', UserService::instance()->getUserInfo($user->getId(), $user->getName(), $user->getAvatar()));
-        $targetUrl = $this->session->get('target_url', '/');
+        $targetUrl = $this->redis->get(Http::instance()->getRequestUserName().'_target_url');
+        var_dump($targetUrl);
 
         return ApplicationContext::getContainer()->get(Response::class)->redirect($targetUrl);
     }
