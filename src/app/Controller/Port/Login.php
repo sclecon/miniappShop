@@ -77,7 +77,7 @@ class Login extends BaseSupportController
         if (!$user){
             return $this->error('用户未登录账号');
         }
-        $this->redis->del('user');
+        $this->redis->del(Http::instance()->getRequestUserName().'_userinfo');
         $user = unserialize($user);
         $sign = UserService::instance()->getUserSign($user);
         unset($user['openid']);
