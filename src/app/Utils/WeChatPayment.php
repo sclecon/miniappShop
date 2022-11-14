@@ -12,11 +12,12 @@ use Hyperf\Utils\ApplicationContext;
 use Psr\SimpleCache\CacheInterface;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Request;
+use Yansongda\Pay\Pay;
 
 class WeChatPayment
 {
 
-    public static function app() {
+    public static function appEasyWechat() {
 
         $config = self::config();
         var_dump($config);
@@ -54,6 +55,12 @@ class WeChatPayment
         ]);
 
         return $app;
+    }
+
+    public static function app(){
+        $config = self::config();
+        var_dump($config);
+        return Pay::wechat($config);
     }
 
     protected static function config() : array {

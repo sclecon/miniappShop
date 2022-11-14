@@ -32,7 +32,8 @@
         "hyperf/session": "^2.2",
         "hyperf/validation": "^2.2",
         "overtrue/wechat": "~4.0",
-        "sclecon/ucentor": "dev-main"
+        "sclecon/ucentor": "dev-main",
+        "yansongda/pay": "^2.10"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",

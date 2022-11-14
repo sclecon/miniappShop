@@ -28,22 +28,16 @@ class UserPayService extends BaseSupportService
         ]);
 
         $orderDetail = [
-            'body'  =>  $title,
             'out_trade_no'  =>  $orderNumber,
+            'body'  =>  $title,
             'total_fee' =>  $amount * 100,
-            'notify_url'    =>  $this->getNotifyUrl(),
-            'trade_type'    =>  'JSAPI',
             'openid'        =>  $openId
         ];
-        var_dump($orderDetail);
-        $response = WeChatPayment::app()->order->unify($orderDetail);
-        var_dump($response);
-        if ($response['return_code'] !== 'SUCCESS' or $response['result_code'] !== 'SUCCESS'){
-            throw new UserPayServiceException($response['return_msg']);
-        }
-        $prepayId = $response['prepay_id'];
-        $payConfig = WeChatPayment::app()->jssdk->bridgeConfig($prepayId);
-        return $payConfig;
+        $result = WeChatPayment::app()->mp($orderDetail);
+        var_dump($result->toArray());
+        return $result->toArray();
+
+
     }
 
     public function getNotifyUrl() : string {
