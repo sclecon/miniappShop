@@ -45,4 +45,24 @@ class UserService extends BaseSupportService
             ->first()
             ->toArray();
     }
+
+    public function depositPay(int $userId, int $auctionId, $deposit) : int {
+        $response = $this->getModel()
+            ->where('user_id', $userId)
+            ->update([
+                'deposit'           =>      'deposit - '.$deposit,
+                'freeze_deposit'    =>      'freeze_deposit + '.$deposit
+            ]);
+        UserDepositService::instance()->addAuctionMargin($userId, $auctionId, $deposit);
+        return $response;
+    }
+
+    public function depositReturnInUserIds(array $userIds, int $auctionId, $deposit){
+        $response = $this->getModel()->whereIn('user_id', $userIds)->update([
+            'deposit'           =>      'deposit + '.$deposit,
+            'freeze_deposit'    =>      'freeze_deposit - '.$deposit
+        ]);
+        UserDepositService::instance()->addReturnDepositInUserId($userIds, $auctionId, $deposit);
+        return $response;
+    }
 }

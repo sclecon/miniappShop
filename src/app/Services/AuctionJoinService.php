@@ -12,6 +12,8 @@ class AuctionJoinService extends BaseSupportService
 {
     protected $model = AuctionJoinModel::class;
 
+    protected $marginField = 'guaranteed_price';
+
     public function addJoin(int $userId, int $auctionId, string $joinPrice) : int {
         $auction = AuctionService::instance()->detail($auctionId,$userId);
         if ($auction['status'] != 1){
@@ -30,14 +32,16 @@ class AuctionJoinService extends BaseSupportService
         }
 
         // 保证金暂定 100
-        $margin = 1000;
-
+        $margin = $auction[$this->marginField];
+        $hasMarginPay = UserDepositService::instance()->hasMarginPayByAuctionId($auctionId);
         // 判断当前用户是否已经缴纳保证金
-
-        if ($user['deposit'] < $margin){
-            throw new AuctionJoinServiceException('您账户当前保证金不足'.$margin.', 无法参与竞拍');
+        if (!$hasMarginPay){
+            // 判断用户保证金是否足够支付当前拍品保证金
+            if ($user['deposit'] < $margin){
+                throw new AuctionJoinServiceException('您账户当前保证金不足'.$margin.', 无法参与竞拍');
+            }
+            UserService::instance()->depositPay($userId, $auctionId, $margin);
         }
-
 
         $joinId = $this->getModel()->add([
             'auction_id'        =>  $auctionId,
@@ -103,13 +107,40 @@ class AuctionJoinService extends BaseSupportService
         $allAuctions = AuctionService::instance()->getIsCanLotteryAuctions();
         $allJoin = $this->getAllJoinByAuctionIds(array_keys($allAuctions));
         foreach ($allJoin as $auctionId => $joins){
-            $joins = ArrayExpand::column($joins, 'join_price');
-            krsort($joins);
-            $userJoins = reset($joins);
-            $userid = $userJoins['user_id'];
-//            foreach ($joins as $join){
-//
-//            }
+            // 获取拍品详情
+            $auction = $allAuctions[$auctionId];
+
+            // 获取中奖者
+            $newJoins = ArrayExpand::column($joins, 'join_price');
+            krsort($newJoins);
+            $userJoins = reset($newJoins);
+            $okUserid = $userJoins['user_id'];
+            $okJoinId = $userJoins['join_id'];
+            // 创建中奖者订单
+            AuctionOrderService::instance()->createOrder($okUserid, $auctionId, $userJoins['join_price']);
+            // 修改中奖竞拍记录状态
+            $this->getModel()->where('join_id', $okJoinId)->update(['status'=>2]);
+
+            // 获取所有竞拍ID
+            $allJoinId = ArrayExpand::getKeys($joins, 'join_id');
+
+            // 修改所有记录为竞拍失败
+            $this->getModel()->whereIn('join_id', $allJoinId)->where('join_id', '<>', $okJoinId)->update(['status'=>0]);
+
+            // 根据用户ID进行数据重组
+            $userJoins = ArrayExpand::columns($joins, 'user_id', 'join_id');
+
+            // 获取所有需要退还押金的用户
+            unset($userJoins[$okUserid]);
+            $allUserIds = array_keys($userJoins);
+
+            // 获取拍品押金金额
+            $auctionMargin = $auction[$this->marginField];
+
+            // 退还所有押金
+            UserService::instance()->depositReturnInUserIds($allUserIds, $auctionId, $auctionMargin);
+
+
         }
     }
 }

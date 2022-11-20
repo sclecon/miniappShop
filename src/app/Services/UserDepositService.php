@@ -29,4 +29,31 @@ class UserDepositService extends BaseSupportService
         }
         return ArrayExpand::columns($list, 'ymd', 'deposit_id');
     }
+
+    public function hasMarginPayByAuctionId(int $auctionId) : int {
+        return $this->getModel()
+            ->where('type', 1)
+            ->where('params', json_encode(['auction_id'=>$auctionId]))
+            ->count();
+    }
+
+    public function addAuctionMargin(int $userId, int $auctionId, $amount) : int {
+        return $this->add($userId, 2, ['auction_id'=>$auctionId], $amount);
+    }
+
+    public function add(int $userId, int $type, array $params, $amount) : int {
+        return $this->getModel()->add([
+            'user_id'   =>  $userId,
+            'amount'    =>  $amount,
+            'type'      =>  $type,
+            'params'    =>  json_encode($params)
+        ]);
+    }
+
+    public function addReturnDepositInUserId(array $userIds, int $auctionId, $amount) : int {
+        foreach ($userIds as $userId){
+            $this->add($userId, '3', ['auction_id'=>$auctionId], $amount);
+        }
+        return true;
+    }
 }

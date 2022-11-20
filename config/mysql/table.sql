@@ -283,3 +283,19 @@ CREATE TABLE IF NOT EXISTS `user_pay` (
     PRIMARY KEY (`pay_id`)
 ) comment='系统用户支付记录表';
 
+
+-- create auction_order
+CREATE TABLE IF NOT EXISTS `auction_order` (
+    `order_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '订单ID',
+    `order_number` CHAR(32) NOT NULL COMMENT '订单号',
+    `user_id` INT(10) UNSIGNED NOT NULL COMMENT '用户ID',
+    `auction_id` INT(10) UNSIGNED NOT NULL COMMENT '拍品ID',
+    `amount` FLOAT(10,2) NOT NULL COMMENT '拍品支付金额',
+    `status` INT(1) DEFAULT 1 COMMENT '支付状态 1=等待支付 2=支付成功 3=订单关闭',
+    `send_id` CHAR(255) NOT NULL COMMENT '发货快递ID',
+    `created_time` INT(10) DEFAULT NULL COMMENT '创建时间',
+    `updated_time` INT(10) DEFAULT NULL COMMENT '修改时间',
+    `deleted_time` INT(10) DEFAULT NULL COMMENT '删除时间',
+    PRIMARY KEY (`order_id`)
+) comment='拍品订单表';
+
