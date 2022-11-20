@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Annotation\ApiRouter;
+use App\Controller\Admin\AuctionJoin;
 use App\Controller\BaseSupport\BaseSupportController;
+use App\Services\AuctionJoinService;
 
 /**
  * @ApiRouter(router="index", method="get")
@@ -31,5 +33,13 @@ class Index extends BaseSupportController
             'method' => $method,
             'message' => "Hello {$user}.",
         ];
+    }
+
+    /**
+     * @ApiRouter(router="/test", method="get", intro="首页")
+     */
+    public function test(){
+        AuctionJoinService::instance()->openJoin();
+        return $this->success('test');
     }
 }

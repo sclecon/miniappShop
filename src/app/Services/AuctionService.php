@@ -124,4 +124,27 @@ class AuctionService extends BaseSupportService
         $item['like'] = isset($likes[$item['auction_id']]) ? $likes[$item['auction_id']] : 0;
         return $item;
     }
+
+    public function getIsCanLotteryAuctions() : array {
+        $list = $this->getModel()
+            ->where('status', 1)
+            ->where('start_time', '<', time())
+            ->where('end_time', '<', time())
+            ->get();
+        $list = $list ? $list->toArray() : [];
+        $painterId = array_unique(array_values(ArrayExpand::columnKey($list, 'auction_id', 'painter_id')));
+        $painterNames = PainterService::instance()->getPainterNamesInId($painterId);
+        $painterId = array_keys(ArrayExpand::columns($list, 'auction_id'));
+        $images = AuctionImageService::instance()->getAuctionImagesInAuctionId($painterId);
+        foreach ($list as $key => $value){
+            $list[$key] = $this->format($value, $painterNames, $images, []);
+        }
+        return ArrayExpand::column($list, 'auction_id');
+    }
+
+    public function upgradeThisPrice(int $auctionId, $price) : int {
+        return $this->getModel()
+            ->where('auction_id', $auctionId)
+            ->update(['this_price'=>$price]);
+    }
 }

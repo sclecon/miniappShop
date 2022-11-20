@@ -17,20 +17,38 @@ class AuctionJoinService extends BaseSupportService
         if ($auction['status'] != 1){
             throw new AuctionJoinServiceException('拍品当前状态无法进行参与竞拍');
         }
-        if ($auction['start_price'] >= $joinPrice){
+        if (!$auction['this_price'] && $auction['start_price'] >= $joinPrice){
             throw new AuctionJoinServiceException('竞拍出价不能低于起拍价');
+        } else if ($auction['this_price'] && $auction['this_price'] >= $joinPrice){
+            throw new AuctionJoinServiceException('竞拍出价不能低于当前竞拍价');
+        } else if ($joinPrice < $auction['append_price']){
+            throw new AuctionJoinServiceException('竞拍加价单次不得小于'.$auction['append_price'].'元');
         }
         $user = UserService::instance()->getUserInfoByUserId($userId);
         if (!$user){
             throw new AuctionJoinServiceException('用户不存在');
         }
-        return $this->getModel()->add([
+
+        // 保证金暂定 100
+        $margin = 1000;
+
+        // 判断当前用户是否已经缴纳保证金
+
+        if ($user['deposit'] < $margin){
+            throw new AuctionJoinServiceException('您账户当前保证金不足'.$margin.', 无法参与竞拍');
+        }
+
+
+        $joinId = $this->getModel()->add([
             'auction_id'        =>  $auctionId,
             'avatar'            => $user['avatar'],
             'user_id'           => $userId,
             'join_price'        => $joinPrice,
             'status'            =>  1,
         ]);
+        AuctionService::instance()->upgradeThisPrice($auctionId, $joinPrice);
+
+        return $joinId;
     }
 
     public function joinList(int $auctionId){
@@ -70,5 +88,28 @@ class AuctionJoinService extends BaseSupportService
             $list[$key] = $value;
         }
         return $list;
+    }
+
+    public function getAllJoinByAuctionIds(array $allAuctionIds) : array {
+        $list = $this->getModel()
+            ->whereIn('auction_id', $allAuctionIds)
+            ->select(['join_id', 'auction_id', 'user_id', 'join_price'])
+            ->get();
+        $list = $list ? $list->toArray() : [];
+        return ArrayExpand::columns($list, 'auction_id', 'join_id');
+    }
+
+    public function openJoin(){
+        $allAuctions = AuctionService::instance()->getIsCanLotteryAuctions();
+        $allJoin = $this->getAllJoinByAuctionIds(array_keys($allAuctions));
+        foreach ($allJoin as $auctionId => $joins){
+            $joins = ArrayExpand::column($joins, 'join_price');
+            krsort($joins);
+            $userJoins = reset($joins);
+            $userid = $userJoins['user_id'];
+//            foreach ($joins as $join){
+//
+//            }
+        }
     }
 }
