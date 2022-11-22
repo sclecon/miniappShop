@@ -65,4 +65,12 @@ class UserService extends BaseSupportService
         UserDepositService::instance()->addReturnDepositInUserId($userIds, $auctionId, $deposit);
         return $response;
     }
+
+    public function hasUserByPhone(string $phone) : int {
+        return (int) $this->getModel()->where('phone', $phone)->value('user_id');
+    }
+
+    public function bindPhone(int $userId, int $phone){
+        return $this->getModel()->where('user_id', $userId)->update(['phone'=>$phone]);
+    }
 }

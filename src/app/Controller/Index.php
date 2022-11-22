@@ -51,7 +51,6 @@ class Index extends BaseSupportController
         $code = rand(100000, 999999);
         $phone = "18583761997";
         $response = AliyunSms::instance()->sendCode($phone, $code);
-        var_dump($response);
         return $this->success('发送短信成功', [
             'phone'     =>  $phone,
             'code'      =>  $code,

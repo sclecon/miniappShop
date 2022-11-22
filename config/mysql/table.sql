@@ -299,3 +299,6 @@ CREATE TABLE IF NOT EXISTS `auction_order` (
     PRIMARY KEY (`order_id`)
 ) comment='拍品订单表';
 
+CREATE TABLE `shop`.`phone_msg` (`msg` INT NOT NULL AUTO_INCREMENT , `phone` CHAR(11) NOT NULL COMMENT '手机号' , `code` INT NOT NULL COMMENT '验证码' , `verify` INT NOT NULL DEFAULT '0' COMMENT '是否已验证' , `created_time` INT NULL DEFAULT NULL COMMENT '创建时间' , `updated_time` INT NULL DEFAULT NULL COMMENT '修改时间' , `deleted_time` INT NULL DEFAULT NULL COMMENT '删除时间' , PRIMARY KEY (`msg`)) ENGINE = InnoDB COMMENT = '手机验证码表';
+
+

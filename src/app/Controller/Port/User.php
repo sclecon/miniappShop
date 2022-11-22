@@ -13,6 +13,7 @@ use App\Annotation\ApiRouter;
 use App\Annotation\Validator;
 use App\Controller\BaseSupport\BaseSupportController;
 use App\Services\AuctionJoinService;
+use App\Services\PhoneMsgService;
 use App\Services\UserDepositService;
 use App\Services\UserService;
 use App\Middleware\User\AuthenticationMiddleware;
@@ -61,5 +62,37 @@ class User extends BaseSupportController
         return $this->success('获取我的竞拍记录成功', [
             'list'   =>   AuctionJoinService::instance()->userJoinList($userId, $status, $page, $number)
         ]);
+    }
+
+    /**
+     * @ApiRouter(router="phone/send", method="get", intro="发送验证码绑定手机")
+     * @Validator(attribute="phone", required=true, rule="string", intro="手机号")
+     */
+    public function sendCode(){
+        $phone = $this->request->input('phone');
+        if (UserService::instance()->hasUserByPhone($phone)){
+            return  $this->error('该手机号已绑定其他账号，请勿重复绑定');
+        }
+        return $this->success('发送验证码成功', [
+            'msg_id'    =>  PhoneMsgService::instance()->sendCode($phone),
+        ]);
+    }
+
+    /**
+     * @ApiRouter(router="phone/verify", method="get", intro="验证")
+     * @Validator(attribute="phone", required=true, rule="string", intro="手机号")
+     * @Validator(attribute="msg_id", required=true, rule="integer", intro="验证码ID")
+     * @Validator(attribute="code", required=true, rule="integer", intro="验证码")
+     */
+    public function check(){
+        $phone = $this->request->input('phone');
+        $msgId = (int) $this->request->input('msg_id');
+        $code = (int) $this->request->input('code');
+        $verifyFlag = PhoneMsgService::instance()->verifyCode($phone, $code, $msgId);
+        if ($verifyFlag){
+            $userId = $this->getAuthUserId();
+            UserService::instance()->bindPhone($userId, $phone);
+        }
+        return $verifyFlag ? $this->success('绑定手机号成功') : $this->error('绑定手机号失败');
     }
 }
