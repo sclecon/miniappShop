@@ -79,7 +79,7 @@ class User extends BaseSupportController
     }
 
     /**
-     * @ApiRouter(router="phone/verify", method="get", intro="验证")
+     * @ApiRouter(router="phone/verify", method="get", intro="验证验证码是否正确")
      * @Validator(attribute="phone", required=true, rule="string", intro="手机号")
      * @Validator(attribute="msg_id", required=true, rule="integer", intro="验证码ID")
      * @Validator(attribute="code", required=true, rule="integer", intro="验证码")
