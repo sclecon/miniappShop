@@ -15,6 +15,7 @@
         "php": ">=7.3",
         "ext-iconv": "*",
         "ext-zip": "^1.15",
+        "alibabacloud/dysmsapi-20170525": "^2.0",
         "firebase/php-jwt": "^6.2",
         "hyperf/cache": "~2.2.0",
         "hyperf/command": "^2.2",
