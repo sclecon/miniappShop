@@ -41,7 +41,7 @@ class AuctionJoin extends BaseCurd
             $userIds = ArrayExpand::getKeys($list, 'user_id');
             $users = UserService::instance()->getUserInfoInUserId($userIds);
             foreach ($list as $key => $value){
-                $list['user'] = isset($users[$value['user_id']]) ? $users[$value['user_id']] : [];
+                $list[$key]['user'] = isset($users[$value['user_id']]) ? $users[$value['user_id']] : [];
             }
         }
         return $this->success('获取数据列表成功', [
