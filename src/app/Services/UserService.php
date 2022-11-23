@@ -73,4 +73,8 @@ class UserService extends BaseSupportService
     public function bindPhone(int $userId, int $phone){
         return $this->getModel()->where('user_id', $userId)->update(['phone'=>$phone]);
     }
+
+    public function getUserPhone(int $userId) : string {
+        return (string) $this->getModel()->where('user_id', $userId)->value('phone');
+    }
 }

@@ -95,4 +95,13 @@ class User extends BaseSupportController
         }
         return $verifyFlag ? $this->success('绑定手机号成功') : $this->error('绑定手机号失败');
     }
+
+    public function getPhone(){
+        $userId = $this->getAuthUserId();
+        $phone = UserService::instance()->getUserPhone($userId);
+        return $this->success('获取手机号成功', [
+            'phone' =>  $phone,
+            'bind'  =>  $phone ? 1: 0
+        ]);
+    }
 }
