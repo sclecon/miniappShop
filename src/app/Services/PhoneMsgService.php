@@ -31,7 +31,7 @@ class PhoneMsgService extends BaseSupportService
     }
 
     public function verifyCode(string $phone, int $code, int $msgId) : int {
-        $msg = $this->getModel()->where('phone', $phone)->where('code', $code)->where('msg_id', $msgId)->where('verify', 1)->first();
+        $msg = $this->getModel()->where('phone', $phone)->where('code', $code)->where('msg_id', $msgId)->where('verify', 0)->first();
         if (!$msg){
             throw new PhoneMsgServiceException('验证码错误');
         }
