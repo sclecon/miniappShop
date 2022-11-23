@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Model\UserModel;
 use App\Services\BaseSupport\BaseSupportService;
+use App\Utils\ArrayExpand;
 use App\Utils\Sign\PortUser;
 
 class UserService extends BaseSupportService
@@ -76,5 +77,11 @@ class UserService extends BaseSupportService
 
     public function getUserPhone(int $userId) : string {
         return (string) $this->getModel()->where('user_id', $userId)->value('phone');
+    }
+
+    public function getUserInfoInUserId(array $userIds) : array {
+        $list = $this->getModel()->whereIn('user_id', $userIds)->get()->toArray();
+        $list = $list ?: [];
+        return ArrayExpand::column($list, 'user_id');
     }
 }
