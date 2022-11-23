@@ -16,4 +16,6 @@ class PhoneMsgModel extends BaseSupportModel
     protected $table = 'phone_msg';
 
     protected $primaryKey = 'msg_id';
+
+    protected $fillable = ['status'];
 }
