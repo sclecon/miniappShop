@@ -1,0 +1,1 @@
+import{s,M as t}from"./request.e88f5894.js";const r=()=>s({url:"/port/shop/banner/list",method:t.GET}),e=(o={})=>s({url:"/port/shop/list",method:t.GET,params:o}),a=o=>s({url:"/port/shop/detail",method:t.GET,params:o});export{r as B,e as S,a};
