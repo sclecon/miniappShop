@@ -96,6 +96,9 @@ class User extends BaseSupportController
         return $verifyFlag ? $this->success('绑定手机号成功') : $this->error('绑定手机号失败');
     }
 
+    /**
+     * @ApiRouter(router="phone", method="get", intro="获取用户绑定的手机号")
+     */
     public function getPhone(){
         $userId = $this->getAuthUserId();
         $phone = UserService::instance()->getUserPhone($userId);
