@@ -31,14 +31,14 @@ class PhoneMsgService extends BaseSupportService
     }
 
     public function verifyCode(string $phone, int $code, int $msgId) : int {
-        $msg = $this->getModel()->where('phone', $phone)->where('code', $code)->where('msg_id', $msgId)->where('verify', 0)->first();
+        $msg = $this->getModel()->where('phone', $phone)->where('code', $code)->where('msg_id', $msgId)->where('status', 0)->first();
         if (!$msg){
             throw new PhoneMsgServiceException('验证码错误');
         }
         if ($msg->created_time+300 < time()){
             throw new PhoneMsgServiceException('验证码已过期');
         }
-        return $msg->update(['verify'=>1]);
+        return $msg->update(['status'=>1]);
     }
 
     protected function createCode(int $length = 6) : int {
