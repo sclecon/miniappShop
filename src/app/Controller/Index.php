@@ -27,7 +27,7 @@ class Index extends BaseSupportController
      */
     public function index()
     {
-        return $this->response->redirect('/static');
+        return $this->response->redirect('/static/index.html');
     }
 
     /**
