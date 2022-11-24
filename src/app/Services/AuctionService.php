@@ -107,8 +107,8 @@ class AuctionService extends BaseSupportService
     }
 
     public function format(array $item, array $painterNames, array $images, array $likes) : array {
-        $item['start_time_str'] = date('Y-m-d H:i:s', time());
-        $item['end_time_str'] = date('Y-m-d H:i:s', time());
+        $item['start_time_str'] = date('Y-m-d H:i:s', $item['start_time']);
+        $item['end_time_str'] = date('Y-m-d H:i:s', $item['end_time']);
         $item['status_str'] = $this->getStatusStr($item['status']);
         $item['painter'] = isset($painterNames[$item['painter_id']]) ? $painterNames[$item['painter_id']] : '未知画家';
         $item['images'] = isset($images[$item['auction_id']]) ? $images[$item['auction_id']] : [];
