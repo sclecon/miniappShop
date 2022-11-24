@@ -19,7 +19,7 @@ class AuctionJoinService extends BaseSupportService
         if ($auction['status'] != 1){
             throw new AuctionJoinServiceException('拍品当前状态无法进行参与竞拍');
         }
-        if ($auction['start_time'] > time() or $auction['over_time'] < time()){
+        if ($auction['start_time'] > time() or $auction['end_time'] < time()){
             throw new AuctionJoinServiceException('拍品当前状态无法进行参与竞拍');
         }
         if (!$auction['this_price'] && $auction['start_price'] >= $joinPrice){
