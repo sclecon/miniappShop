@@ -6,6 +6,7 @@ use App\Annotation\ApiRouter;
 use App\Annotation\Validator;
 use App\Controller\Admin\Base\BaseCurd;
 use App\Model\AuctionJoinModel;
+use App\Services\AuctionService;
 use App\Services\UserService;
 use App\Utils\ArrayExpand;
 
@@ -38,10 +39,11 @@ class AuctionJoin extends BaseCurd
                 ->select()
                 ->get()
                 ->toArray();
-            $userIds = ArrayExpand::getKeys($list, 'user_id');
-            $users = UserService::instance()->getUserInfoInUserId($userIds);
+            $users = UserService::instance()->getUserInfoInUserId(ArrayExpand::getKeys($list, 'user_id'));
+            $auctions = AuctionService::instance()->getAuctionListInAuctionIds(ArrayExpand::getKeys($list, 'auction_id'));
             foreach ($list as $key => $value){
                 $list[$key]['user'] = isset($users[$value['user_id']]) ? $users[$value['user_id']] : [];
+                $list[$key]['auction'] = isset($auctions[$value['auction_id']]) ? $auctions[$value['auction_id']] : [];
             }
         }
         return $this->success('获取数据列表成功', [
