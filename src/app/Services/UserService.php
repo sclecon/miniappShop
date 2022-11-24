@@ -48,12 +48,8 @@ class UserService extends BaseSupportService
     }
 
     public function depositPay(int $userId, int $auctionId, $deposit) : int {
-        $response = $this->getModel()
-            ->where('user_id', $userId)
-            ->update([
-                'deposit'           =>      'deposit - '.$deposit,
-                'freeze_deposit'    =>      'freeze_deposit + '.$deposit
-            ]);
+        $response = $this->getModel()->where('user_id', $userId)->increment('freeze_deposit', $deposit);
+        $response = $this->getModel()->where('user_id', $userId)->decrement('deposit', $deposit);
         UserDepositService::instance()->addAuctionMargin($userId, $auctionId, $deposit);
         return $response;
     }
