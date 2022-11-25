@@ -28,6 +28,5 @@ class PainterService extends BaseSupportService
             ->get()
             ->toArray();
         return ArrayExpand::column($list, 'painter_id');
-        // return ArrayExpand::columnKey($list, 'painter_id', 'name');
     }
 }

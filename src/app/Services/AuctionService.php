@@ -7,6 +7,7 @@ use App\Model\AuctionModel;
 use App\Model\AuctionTopicAccessModel;
 use App\Services\BaseSupport\BaseSupportService;
 use App\Utils\ArrayExpand;
+use App\Utils\Http;
 
 class AuctionService extends BaseSupportService
 {
@@ -114,6 +115,7 @@ class AuctionService extends BaseSupportService
         $painterAvatars = ArrayExpand::columnKey($painters, 'painter_id', 'avatar');
         $item['painter'] = isset($painterNames[$item['painter_id']]) ? $painterNames[$item['painter_id']] : '未知画家';
         $item['painter_avatar'] = isset($painterAvatars[$item['painter_id']]) ? $painterAvatars[$item['painter_id']] : '/painter/202211/25/915adc124906ed303457d281f75ef658.jpeg';
+        $item['painter_avatar'] = Http::instance()->image($item['painter_avatar']);
         $item['images'] = isset($images[$item['auction_id']]) ? $images[$item['auction_id']] : [];
         if (isset($item['postage'])){
             $item['postage_str'] = $item['postage'] ? '包邮' : '不包邮';
