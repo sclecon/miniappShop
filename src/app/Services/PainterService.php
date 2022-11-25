@@ -24,9 +24,10 @@ class PainterService extends BaseSupportService
     public function getPainterNamesInId(array $ids) : array {
         $list = $this->getModel()
             ->whereIn('painter_id', $ids)
-            ->select(['painter_id', 'name'])
+            ->select(['painter_id', 'name', 'avatar'])
             ->get()
             ->toArray();
-        return ArrayExpand::columnKey($list, 'painter_id', 'name');
+        return ArrayExpand::column($list, 'painter_id');
+        // return ArrayExpand::columnKey($list, 'painter_id', 'name');
     }
 }

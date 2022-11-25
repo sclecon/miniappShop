@@ -106,11 +106,14 @@ class AuctionService extends BaseSupportService
         return isset($status[$s]) ? $status[$s] : '未知状态';
     }
 
-    public function format(array $item, array $painterNames, array $images, array $likes) : array {
+    public function format(array $item, array $painters, array $images, array $likes) : array {
         $item['start_time_str'] = date('Y-m-d H:i:s', $item['start_time']);
         $item['end_time_str'] = date('Y-m-d H:i:s', $item['end_time']);
         $item['status_str'] = $this->getStatusStr($item['status']);
+        $painterNames = ArrayExpand::columnKey($painters, 'painter_id', 'name');
+        $painterAvatars = ArrayExpand::columnKey($painters, 'painter_id', 'avatar');
         $item['painter'] = isset($painterNames[$item['painter_id']]) ? $painterNames[$item['painter_id']] : '未知画家';
+        $item['painter_avatar'] = isset($painterAvatars[$item['painter_id']]) ? $painterAvatars[$item['painter_id']] : '/painter/202211/25/915adc124906ed303457d281f75ef658.jpeg';
         $item['images'] = isset($images[$item['auction_id']]) ? $images[$item['auction_id']] : [];
         if (isset($item['postage'])){
             $item['postage_str'] = $item['postage'] ? '包邮' : '不包邮';
