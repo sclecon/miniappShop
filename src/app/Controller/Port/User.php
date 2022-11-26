@@ -65,7 +65,7 @@ class User extends BaseSupportController
     }
 
     /**
-     * @ApiRouter(router="phone/send", method="get", intro="发送验证码绑定手机")
+     * @ApiRouter(router="phone/send", method="get", intro="发送验证码")
      * @Validator(attribute="phone", required=true, rule="string", intro="手机号")
      */
     public function sendCode(){
@@ -79,7 +79,7 @@ class User extends BaseSupportController
     }
 
     /**
-     * @ApiRouter(router="phone/verify", method="get", intro="验证验证码是否正确")
+     * @ApiRouter(router="phone/verify", method="get", intro="绑定手机")
      * @Validator(attribute="phone", required=true, rule="string", intro="手机号")
      * @Validator(attribute="msg_id", required=true, rule="integer", intro="验证码ID")
      * @Validator(attribute="code", required=true, rule="integer", intro="验证码")
@@ -94,6 +94,24 @@ class User extends BaseSupportController
             UserService::instance()->bindPhone($userId, $phone);
         }
         return $verifyFlag ? $this->success('绑定手机号成功') : $this->error('绑定手机号失败');
+    }
+
+    /**
+     * @ApiRouter(router="phone/lifted", method="get", intro="解除手机绑定")
+     * @Validator(attribute="phone", required=true, rule="string", intro="手机号")
+     * @Validator(attribute="msg_id", required=true, rule="integer", intro="验证码ID")
+     * @Validator(attribute="code", required=true, rule="integer", intro="验证码")
+     */
+    public function lifted(){
+        $phone = $this->request->input('phone');
+        $msgId = (int) $this->request->input('msg_id');
+        $code = (int) $this->request->input('code');
+        $verifyFlag = PhoneMsgService::instance()->verifyCode($phone, $code, $msgId);
+        if ($verifyFlag){
+            $userId = $this->getAuthUserId();
+            UserService::instance()->liftedPhone($userId, $phone);
+        }
+        return $verifyFlag ? $this->success('手机解除绑定成功') : $this->error('手机解除绑定失败');
     }
 
     /**

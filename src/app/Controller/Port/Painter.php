@@ -8,7 +8,7 @@ use App\Controller\BaseSupport\BaseSupportController;
 use App\Services\PainterService;
 
 /**
- * @ApiRouter(router="port/painter", method="get", intro="首页轮播图")
+ * @ApiRouter(router="port/painter", method="get", intro="画家相关")
  */
 class Painter extends BaseSupportController
 {

@@ -80,4 +80,8 @@ class UserService extends BaseSupportService
         $list = $list ?: [];
         return ArrayExpand::column($list, 'user_id');
     }
+
+    public function liftedPhone(int $userId, int $phone) : int {
+        return (int) $this->getModel()->where('user_id', $userId)->update(['phone'=>'']);
+    }
 }

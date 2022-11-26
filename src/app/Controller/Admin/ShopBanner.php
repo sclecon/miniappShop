@@ -4,9 +4,9 @@ namespace App\Controller\Admin;
 
 use App\Annotation\ApiRouter;
 use App\Annotation\Validator;
-use App\Controller\Admin\Base\BaseCurd;
 use App\Controller\Admin\Base\UploadImage;
 use App\Model\ShopBannerModel;
+use App\Utils\Http;
 use App\Utils\Image;
 
 /**
