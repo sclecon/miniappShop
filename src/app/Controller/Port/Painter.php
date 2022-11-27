@@ -13,7 +13,7 @@ use App\Services\PainterService;
 class Painter extends BaseSupportController
 {
     /**
-     * @ApiRouter(router="detele", method="get", intro="获取画家详情")
+     * @ApiRouter(router="get", method="get", intro="获取画家详情")
      * @Validator(attribute="painter_id", required=true, rule="integer", intro="画家ID")
      */
     public function delete(){

@@ -67,10 +67,12 @@ class User extends BaseSupportController
     /**
      * @ApiRouter(router="phone/send", method="get", intro="发送验证码")
      * @Validator(attribute="phone", required=true, rule="string", intro="手机号")
+     * @Validator(attribute="bind", required=false, rule="integer", intro="是否为解除验证")
      */
     public function sendCode(){
         $phone = $this->request->input('phone');
-        if (UserService::instance()->hasUserByPhone($phone)){
+        $bind = (int) $this->request->input('bind', 0);
+        if ($bind === 0 && UserService::instance()->hasUserByPhone($phone)){
             return  $this->error('该手机号已绑定其他账号，请勿重复绑定');
         }
         return $this->success('发送验证码成功', [

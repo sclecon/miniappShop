@@ -33,7 +33,7 @@ class AuctionService extends BaseSupportService
         return $list;
     }
 
-    public function list(int $page, int $number, int $status, int $topicId, int $gallery, string $orderBy, int $userId) : array {
+    public function list(int $page, int $number, int $status, int $topicId, int $gallery, string $orderBy, int $userId, int $painterId) : array {
         $model = $this->getModel()
             ->forPage($page, $number)
             ->select(['auction_id', 'painter_id', 'name', 'intro', 'start_price', 'start_time', 'end_time', 'status', 'buy_now_price'])
@@ -59,6 +59,9 @@ class AuctionService extends BaseSupportService
         }
         if ($gallery > 0){
             $model = $model->where($this->getModel()->getTableKey('gallery'), '>', 0);
+        }
+        if ($painterId){
+            $model = $model->where($this->getModel()->getTableKey('painter_id'), $painterId);
         }
         $list = $model->get()->toArray();
         $painterId = array_unique(array_values(ArrayExpand::columnKey($list, 'auction_id', 'painter_id')));

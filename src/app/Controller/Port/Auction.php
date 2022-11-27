@@ -35,6 +35,7 @@ class Auction extends BaseSupportController
      * @Validator(attribute="topic_id", required=false, rule="integer", intro="拍场ID")
      * @Validator(attribute="gallery", required=false, rule="integer", intro="是否画廊")
      * @Validator(attribute="orderby", required=false, rule="string", intro="排序字段")
+     * @Validator(attribute="painter_id", required=false, rule="integer", intro="画家ID")
      */
     public function list(){
         $user = $this->request->getAttribute('user');
@@ -45,8 +46,9 @@ class Auction extends BaseSupportController
         $topicId = (int) $this->request->input('topic_id', -1);
         $gallery = (int) $this->request->input('gallery', -1);
         $orderBy = (string) $this->request->input('orderby', 'auction_id');
+        $painterId = (int) $this->request->input('painter_id', 0);
         return $this->success('获取列表成功', [
-            'list'  =>  AuctionService::instance()->list($page, $number, $status, $topicId, $gallery, $orderBy, $userId),
+            'list'  =>  AuctionService::instance()->list($page, $number, $status, $topicId, $gallery, $orderBy, $userId, $painterId),
         ]);
     }
 
