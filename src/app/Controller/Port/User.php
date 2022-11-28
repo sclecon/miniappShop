@@ -127,4 +127,19 @@ class User extends BaseSupportController
             'bind'  =>  $phone ? 1: 0
         ]);
     }
+
+    /**
+     * @ApiRouter(router="withdraw", method="put", intro="用户提现申请")
+     * @Validator(attribute="total_fee", required=true, rule="string", intro="提现金额")
+     */
+    public function withdraw(){
+        $userId = $this->getAuthUserId();
+        $totalFee = $this->request->input('total_fee');
+        list($deposit, $freezeDeposit) = UserService::instance()->getUserDepositInfo($userId);
+        if ($deposit < $totalFee){
+            return $this->error('提现金额不能大于'.$deposit.'元');
+        }
+        UserService::instance()->addWithdraw($userId, $totalFee);
+        return $this->success('申请提现成功');
+    }
 }

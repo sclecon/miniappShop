@@ -84,4 +84,10 @@ class UserService extends BaseSupportService
     public function liftedPhone(int $userId, int $phone) : int {
         return (int) $this->getModel()->where('user_id', $userId)->update(['phone'=>'']);
     }
+
+    public function addWithdraw(int $userId, string $totalFee){
+        $response = $this->getModel()->where('user_id', $userId)->increment('freeze_deposit', $totalFee);
+        $response = $this->getModel()->where('user_id', $userId)->decrement('deposit', $totalFee);
+        return UserDepositService::instance()->add($userId, 4, ['user_id'=>$userId], $totalFee);
+    }
 }
