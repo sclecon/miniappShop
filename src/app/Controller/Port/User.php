@@ -135,7 +135,7 @@ class User extends BaseSupportController
     public function withdraw(){
         $userId = $this->getAuthUserId();
         $totalFee = $this->request->input('total_fee');
-        list($deposit, $freezeDeposit) = UserService::instance()->getUserDepositInfo($userId);
+        list($deposit, $freezeDeposit) = array_values(UserService::instance()->getUserDepositInfo($userId));
         if ($deposit < $totalFee){
             return $this->error('提现金额不能大于'.$deposit.'元');
         }
