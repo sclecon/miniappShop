@@ -43,7 +43,7 @@ class UserDeposit extends BaseCurd
         if (!$deposit){
             return $this->error('提现申请不存在');
         }
-        if ($deposit->tx_status != 0){
+        if ($deposit->tx_status != 1){
             return $this->error('请勿重复处理提现申请');
         }
         $this->model->where('deposit_id', $depositId)->where('type', 4)->update(['tx_status'=>$status]);
