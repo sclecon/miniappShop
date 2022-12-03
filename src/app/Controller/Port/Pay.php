@@ -25,7 +25,13 @@ class Pay extends BaseSupportController
      */
     public function notify(){
         var_dump('进入了微信回调');
-        $result = WeChatPayment::app()->verify()->toArray();
+        var_dump($this->request->getBody());
+        try {
+            $result = WeChatPayment::app()->verify()->toArray();
+        } catch (\Exception $exception) {
+            var_dump('错误：'.$exception->getMessage());
+            return $this->error($exception->getMessage());
+        }
         var_dump($result);
         if (array_key_exists("return_code", $result) && array_key_exists("result_code", $result) && $result["return_code"] == "SUCCESS" && $result["result_code"] == "SUCCESS") {
             var_dump('支付成功的业务逻辑处理');
