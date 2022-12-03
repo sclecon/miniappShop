@@ -142,4 +142,18 @@ class User extends BaseSupportController
         UserService::instance()->addWithdraw($userId, $totalFee);
         return $this->success('申请提现成功');
     }
+
+    /**
+     * @ApiRouter(router="recharge", method="put", intro="用户保证金充值")
+     * @Validator(attribute="total_fee", required=true, rule="string", intro="充值金额")
+     */
+    public function recharge(){
+        $userId = $this->getAuthUserId();
+        $openId = $this->getAuthUserOpenId();
+        $totalFee = $this->request->input('total_fee');
+        return $this->success('创建保证金充值订单成功', [
+            'payConfig' =>  UserDepositService::instance()->recharge($userId, $totalFee, $openId),
+            'total_fee' =>  $totalFee
+        ]);
+    }
 }

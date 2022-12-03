@@ -64,4 +64,20 @@ class AuctionOrderService extends BaseSupportService
         }
         return UserPayService::instance()->unify($userId, $openId, $orderNumber, $orderDetail['amount'], 'auction', '竞拍成功 - '.$orderDetail['auction']['name']);
     }
+
+    public function notify(string $orderNumber){
+        $order = $this->getModel()->where('order_number', $orderNumber)->first();
+        if (!$order){
+            throw new AuctionOrderServiceException('商品订单不存在');
+        }
+        if ($order->status == 3){
+            throw new AuctionOrderServiceException('商品订单已关闭');
+        }
+        if ($order->payed == 2){
+            throw new AuctionOrderServiceException('商品订单已支付成功');
+        }
+        return $this->getModel()->where('order_number', $orderNumber)->update([
+            'status'    =>  2,
+        ]);
+    }
 }

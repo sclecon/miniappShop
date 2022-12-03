@@ -90,4 +90,8 @@ class UserService extends BaseSupportService
         $response = $this->getModel()->where('user_id', $userId)->decrement('deposit', $totalFee);
         return UserDepositService::instance()->add($userId, 4, ['user_id'=>$userId], $totalFee);
     }
+
+    public function rechargeDeposit(int $userId, string $totalFee){
+        return $this->getModel()->where('user_id', $userId)->increment('deposit', $totalFee);
+    }
 }

@@ -74,4 +74,22 @@ class ShopOrderService extends BaseSupportService
     protected function createOrderNumber() : string {
         return 'shop'.date('YmdHis', time()).rand(1000, 9999);
     }
+
+    public function notify(string $orderNumber){
+        $order = $this->getModel()->where('order_number', $orderNumber)->first();
+        if (!$order){
+            throw new ShopOrderServiceException('商品订单不存在');
+        }
+        if ($order->payed == 0){
+            throw new ShopOrderServiceException('商品订单已关闭');
+        }
+        if ($order->payed == 2){
+            throw new ShopOrderServiceException('商品订单已支付成功');
+        }
+        return $this->getModel()->where('order_number', $orderNumber)->update([
+            'payed'     =>  2,
+            'status'    =>  2,
+            'payed_time'    =>  time(),
+        ]);
+    }
 }

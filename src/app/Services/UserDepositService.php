@@ -9,6 +9,7 @@
 
 namespace App\Services;
 
+use App\Exception\Service\UserDepositServiceException;
 use App\Model\UserDepositModel;
 use App\Services\BaseSupport\BaseSupportService;
 use App\Utils\ArrayExpand;
@@ -55,5 +56,37 @@ class UserDepositService extends BaseSupportService
             $this->add($userId, '3', ['auction_id'=>$auctionId], $amount);
         }
         return true;
+    }
+
+    public function recharge(int $userId, string $totalFee, string $openId){
+        $params = $this->getOrderNumber();
+        $this->add($userId, 1, $params, $totalFee);
+        $orderNumber = $params['order_number'];
+        return UserPayService::instance()->unify($userId, $openId, $orderNumber, $totalFee, 'auction', '保证金充值 - '.$totalFee);
+    }
+
+    public function getOrderNumber($orderNumber = false, $array = true){
+        if (!$orderNumber){
+            $orderNumber = 'deposit'.date('YmdHis', time()).rand(1000, 9999);
+        }
+        $data = ['order_number'=>$orderNumber];
+        return $array ? $data : json_encode($data);
+    }
+
+    public function notify(string $order_number){
+        $order = $this->getModel()->where('params', $this->getOrderNumber($order_number, false))->first();
+        if (!$order){
+            throw new UserDepositServiceException('充值订单不存在');
+        }
+        if ($order->cz_status == 0){
+            throw new UserDepositServiceException('充值订单已关闭');
+        }
+        if ($order->cz_status == 2){
+            throw new UserDepositServiceException('订单已充值成功');
+        }
+        UserService::instance()->rechargeDeposit($order->user_id, $order->amount);
+        return $this->getModel()->where('params', $this->getOrderNumber($order_number, false))->update([
+            'cz_status'    =>  2,
+        ]);
     }
 }

@@ -83,6 +83,12 @@ class ShopOrder extends BaseSupportController
         $orderNumber = $this->request->input('order_number');
         $detail = ShopOrderService::instance()->detail($userId, $orderNumber);
         $title = '购买商品:'.$detail['shop_name'];
+        if ($detail['payed'] == 2){
+            return $this->error('请勿重复支付');
+        }
+        if ($detail['payed'] == 0){
+            return $this->error('订单已关闭');
+        }
         $payParams = UserPayService::instance()->unify($userId, $openId, $orderNumber, $detail['total_price'], 'shopOrder', $title);
         return $this->success('获取支付配置成功', [
             'payParams' =>  $payParams,
