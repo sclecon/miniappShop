@@ -43,10 +43,10 @@ class UserDeposit extends BaseCurd
         if (!$deposit){
             return $this->error('提现申请不存在');
         }
-        if ($deposit->status != 0){
+        if ($deposit->tx_status != 0){
             return $this->error('请勿重复处理提现申请');
         }
-        $this->model->where('deposit_id', $depositId)->where('type', 4)->update(['status'=>$status]);
+        $this->model->where('deposit_id', $depositId)->where('type', 4)->update(['tx_status'=>$status]);
         UserService::instance()->getModel()->where('user_id', $deposit->user_id)->decrement('freeze_deposit', $deposit->amount);
         if ($status == 0){
             UserService::instance()->getModel()->where('user_id', $deposit->user_id)->increment('deposit', $deposit->amount);
