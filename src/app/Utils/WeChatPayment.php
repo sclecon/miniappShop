@@ -10,7 +10,6 @@ class WeChatPayment
 
     public static function app(){
         $config = self::config();
-        var_dump($config);
         return Pay::wechat($config);
     }
 

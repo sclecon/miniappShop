@@ -66,6 +66,8 @@ class UserPayService extends BaseSupportService
             return ShopOrderService::instance()->notify($orderNumber);
         } else if ($order->type === 'auction'){
             return AuctionOrderService::instance()->notify($orderNumber);
+        } else if ($order->type === 'deposit'){
+            return UserDepositService::instance()->notify($orderNumber);
         }
     }
 

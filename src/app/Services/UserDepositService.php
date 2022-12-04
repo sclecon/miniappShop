@@ -62,7 +62,7 @@ class UserDepositService extends BaseSupportService
         $params = $this->getOrderNumber();
         $this->add($userId, 1, $params, $totalFee);
         $orderNumber = $params['order_number'];
-        return UserPayService::instance()->unify($userId, $openId, $orderNumber, $totalFee, 'auction', '保证金充值 - '.$totalFee);
+        return UserPayService::instance()->unify($userId, $openId, $orderNumber, $totalFee, 'deposit', '保证金充值 - '.$totalFee);
     }
 
     public function getOrderNumber($orderNumber = false, $array = true){

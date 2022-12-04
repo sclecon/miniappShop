@@ -24,20 +24,13 @@ class Pay extends BaseSupportController
      * @ApiRouter(router="notify", method={"get", "post", "put"}, intro="支付异步通知")
      */
     public function notify(){
-        var_dump('进入了微信回调');
-        var_dump($this->request->getBody());
         try {
-            $result = WeChatPayment::app()->verify()->toArray();
+            $result = WeChatPayment::app()->verify($this->request->getBody())->toArray();
         } catch (\Exception $exception) {
-            var_dump('错误：'.$exception->getMessage());
             return $this->error($exception->getMessage());
         }
-        var_dump($result);
         if (array_key_exists("return_code", $result) && array_key_exists("result_code", $result) && $result["return_code"] == "SUCCESS" && $result["result_code"] == "SUCCESS") {
-            var_dump('支付成功的业务逻辑处理');
-            $orderId = $result['out_trade_no'];
-            var_dump($orderId);
-            UserPayService::instance()->notify($orderId);
+            UserPayService::instance()->notify($result['out_trade_no']);
         }
         return WeChatPayment::app()->success()->getContent();
     }
