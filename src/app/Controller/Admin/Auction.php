@@ -7,13 +7,13 @@ use App\Annotation\Validator;
 use App\Controller\Admin\Base\BaseCurd;
 use App\Model\AuctionModel;
 use App\Services\AuctionImageService;
-use App\Services\AuctionLikeService;
 use App\Services\AuctionService;
 use App\Services\PainterService;
 use App\Utils\ArrayExpand;
+use App\Middleware\Admin\AuthenticationMiddleware;
 
 /**
- * @ApiRouter(router="admin/auction", method="get", intro="拍品管理")
+ * @ApiRouter(router="admin/auction", method="get", intro="拍品管理", middleware={AuthenticationMiddleware::class})
  */
 class Auction extends BaseCurd
 {

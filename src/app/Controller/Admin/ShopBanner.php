@@ -8,9 +8,10 @@ use App\Controller\Admin\Base\UploadImage;
 use App\Model\ShopBannerModel;
 use App\Utils\Http;
 use App\Utils\Image;
+use App\Middleware\Admin\AuthenticationMiddleware;
 
 /**
- * @ApiRouter(router="admin/shop/banner", method="get", intro="市场Banner轮播图")
+ * @ApiRouter(router="admin/shop/banner", method="get", intro="市场Banner轮播图", middleware={AuthenticationMiddleware::class})
  */
 class ShopBanner extends UploadImage
 {

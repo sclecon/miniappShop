@@ -9,9 +9,10 @@ use App\Model\AuctionJoinModel;
 use App\Services\AuctionService;
 use App\Services\UserService;
 use App\Utils\ArrayExpand;
+use App\Middleware\Admin\AuthenticationMiddleware;
 
 /**
- * @ApiRouter(router="admin/auction/join", method="get", intro="竞拍管理")
+ * @ApiRouter(router="admin/auction/join", method="get", intro="竞拍管理", middleware={AuthenticationMiddleware::class})
  */
 class AuctionJoin extends BaseCurd
 {

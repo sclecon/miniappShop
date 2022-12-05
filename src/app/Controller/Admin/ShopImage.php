@@ -5,9 +5,10 @@ namespace App\Controller\Admin;
 use App\Annotation\ApiRouter;
 use App\Controller\Admin\Base\UploadImage;
 use App\Model\ShopImageModel;
+use App\Middleware\Admin\AuthenticationMiddleware;
 
 /**
- * @ApiRouter(router="admin/shop/image", method="get", intro="商品主图")
+ * @ApiRouter(router="admin/shop/image", method="get", intro="商品主图", middleware={AuthenticationMiddleware::class})
  */
 class ShopImage extends UploadImage
 {

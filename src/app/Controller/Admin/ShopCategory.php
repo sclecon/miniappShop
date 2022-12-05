@@ -8,9 +8,10 @@ use App\Controller\Admin\Base\UploadImage;
 use App\Model\ShopCategoryModel;
 use App\Utils\Http;
 use App\Utils\Image;
+use App\Middleware\Admin\AuthenticationMiddleware;
 
 /**
- * @ApiRouter(router="admin/shop/category", method="get", intro="商品分类")
+ * @ApiRouter(router="admin/shop/category", method="get", intro="商品分类", middleware={AuthenticationMiddleware::class})
  */
 class ShopCategory extends UploadImage
 {
