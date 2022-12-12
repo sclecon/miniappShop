@@ -103,4 +103,8 @@ class ConfigService extends BaseSupportService
             ->value('value');
         return is_null($value) ? $default : $value;
     }
+
+    public function getAuctionDeposit(){
+        return $this->getConfig('auction_diposit', false);
+    }
 }

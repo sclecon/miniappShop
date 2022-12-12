@@ -35,7 +35,13 @@ class AuctionJoinService extends BaseSupportService
         }
 
         // 保证金暂定 100
-        $margin = $auction[$this->marginField];
+        // $margin = $auction[$this->marginField];
+
+        // 全局统一保证金
+        $margin = ConfigService::instance()->getAuctionDeposit();
+        if (!$margin){
+            throw new AuctionJoinServiceException('暂未设置保证金，无法参与竞拍');
+        }
         $hasMarginPay = UserDepositService::instance()->hasMarginPayByAuctionId($auctionId);
         // 判断当前用户是否已经缴纳保证金
         if (!$hasMarginPay){
