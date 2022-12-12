@@ -15,9 +15,10 @@ use App\Controller\Admin\Base\BaseCurd;
 use App\Model\UserDepositModel;
 use App\Services\UserService;
 use App\Utils\ArrayExpand;
+use App\Middleware\Admin\AuthenticationMiddleware;
 
 /**
- * @ApiRouter(router="admin/user/deposit", method="get", intro="用户保证金变动记录")
+ * @ApiRouter(router="admin/user/deposit", method="get", intro="用户保证金变动记录", middleware={AuthenticationMiddleware::class})
  */
 class UserDeposit extends BaseCurd
 {

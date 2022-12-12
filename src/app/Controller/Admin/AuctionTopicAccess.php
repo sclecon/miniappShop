@@ -8,9 +8,10 @@ use App\Controller\Admin\Base\BaseCurd;
 use App\Model\AuctionTopicAccessModel;
 use App\Services\AuctionService;
 use App\Utils\ArrayExpand;
+use App\Middleware\Admin\AuthenticationMiddleware;
 
 /**
- * @ApiRouter(router="admin/auction/topic/access", method="get", intro="拍场内拍品管理")
+ * @ApiRouter(router="admin/auction/topic/access", method="get", intro="拍场内拍品管理", middleware={AuthenticationMiddleware::class})
  */
 class AuctionTopicAccess extends BaseCurd
 {

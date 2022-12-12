@@ -6,9 +6,10 @@ use App\Annotation\ApiRouter;
 use App\Annotation\Validator;
 use App\Controller\Admin\Base\BaseCurd;
 use App\Model\ShopModel;
+use App\Middleware\Admin\AuthenticationMiddleware;
 
 /**
- * @ApiRouter(router="admin/shop", method="get", intro="商品管理")
+ * @ApiRouter(router="admin/shop", method="get", intro="商品管理", middleware={AuthenticationMiddleware::class})
  */
 class Shop extends BaseCurd
 {

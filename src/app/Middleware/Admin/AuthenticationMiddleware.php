@@ -23,10 +23,19 @@ class AuthenticationMiddleware implements MiddlewareInterface
      */
     protected $portUser;
 
+    /**
+     * @var bool
+     */
+    protected $mandatory = true;
+
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if ($request->hasHeader($this->authentication) === false){
-            throw new AuthenticationException('Admin Authentication parameter must be passed');
+            if ($this->mandatory){
+                throw new AuthenticationException('Admin Authentication parameter must be passed');
+            }
+            var_dump('Admin Authentication parameter must be passed');
+            return $handler->handle($request);
         }
         $adminer = $this->portUser->decode($request->getHeader($this->authentication)[0]);
         $request = $request->withAttribute('adminer', $adminer);

@@ -12,9 +12,10 @@ namespace App\Controller\Admin;
 use App\Annotation\ApiRouter;
 use App\Controller\Admin\Base\BaseCurd;
 use App\Model\PhoneMsgModel;
+use App\Middleware\Admin\AuthenticationMiddleware;
 
 /**
- * @ApiRouter(router="admin/phone/msg", method="get", intro="手机验证码管理")
+ * @ApiRouter(router="admin/phone/msg", method="get", intro="手机验证码管理", middleware={AuthenticationMiddleware::class})
  */
 class PhoneMsg extends BaseCurd
 {
