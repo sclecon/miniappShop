@@ -16,14 +16,16 @@ class Auction extends BaseSupportController
      * @ApiRouter(router="boutique", method="get", intro="获取精品拍品")
      * @Validator(attribute="page", required=false, rule="integer", intro="分页")
      * @Validator(attribute="number", required=false, rule="integer", intro="显示数量")
+     * @Validator(attribute="painter_id", required=false, rule="integer", intro="画家ID")
      */
     public function boutique(){
         $user = $this->request->getAttribute('user');
         $userId = $user ? $user['user_id'] : 1;
         $page = (int) $this->request->input('page', 1);
         $number = (int) $this->request->input('number', 50);
+        $painterId = (int) $this->request->input('painter_id', 0);
         return $this->success('获取精品拍品成功', [
-            'list'  =>  AuctionService::instance()->getBoutique($page, $number, $userId),
+            'list'  =>  AuctionService::instance()->getBoutique($page, $number, $userId, $painterId),
         ]);
     }
 

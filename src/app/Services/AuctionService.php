@@ -13,11 +13,14 @@ class AuctionService extends BaseSupportService
 {
     protected $model = AuctionModel::class;
 
-    public function getBoutique(int $page, int $number, int $userId) : array {
+    public function getBoutique(int $page, int $number, int $userId, int $painterId) : array {
         $list = $this->getModel()
             ->whereIn('status', [0, 1])
-            ->where('boutique', '>', 0)
-            ->forPage($page, $number)
+            ->where('boutique', '>', 0);
+        if ($painterId){
+            $list = $list->where('painter_id', $painterId);
+        }
+        $list = $list->forPage($page, $number)
             ->select(['auction_id', 'painter_id', 'name', 'intro', 'start_price', 'start_time', 'end_time', 'status', 'buy_now_price'])
             ->orderByDesc('auction_id')
             ->get()
