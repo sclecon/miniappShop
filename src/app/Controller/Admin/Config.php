@@ -6,12 +6,20 @@ use App\Annotation\ApiRouter;
 use App\Annotation\Validator;
 use App\Controller\Admin\Base\BaseCurd;
 use App\Middleware\Admin\AuthenticationMiddleware;
+use App\Model\ConfigModel;
 
 /**
  * @ApiRouter(router="admin/config", method="get", intro="配置管理", middleware={AuthenticationMiddleware::class})
  */
 class Config extends BaseCurd
 {
+
+
+    public function __construct()
+    {
+        $this->model = new ConfigModel();
+        parent::__construct();
+    }
     /**
      * @ApiRouter(router="delete", intro="数据删除", method="DELETE")
      * @Validator(attribute="id", rule="integer", required=true)

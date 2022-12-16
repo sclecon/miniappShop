@@ -32,7 +32,7 @@ class AuthenticationMiddleware implements MiddlewareInterface
     {
         if ($request->hasHeader($this->authentication) === false){
             if ($this->mandatory){
-                throw new AuthenticationException('Admin Authentication parameter must be passed');
+                // throw new AuthenticationException('Admin Authentication parameter must be passed');
             }
             var_dump('Admin Authentication parameter must be passed');
             return $handler->handle($request);

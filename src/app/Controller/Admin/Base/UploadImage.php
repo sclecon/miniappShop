@@ -140,7 +140,9 @@ class UploadImage extends BaseCurd
                 ->get()
                 ->toArray();
             foreach ($list as $key => $value){
-                $list[$key][$this->imageField] = strpos($list[$key][$this->imageField], 'http') === 0 ? $list[$key][$this->imageField] : Http::instance()->getDomain().$list[$key][$this->imageField];
+                if (isset($list[$key][$this->imageField])){
+                    $list[$key][$this->imageField] = strpos($list[$key][$this->imageField], 'http') === 0 ? $list[$key][$this->imageField] : Http::instance()->getDomain().$list[$key][$this->imageField];
+                }
             }
         }
         return $this->success('获取数据列表成功', [

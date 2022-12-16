@@ -24,7 +24,7 @@ class BaseCurd extends BaseSupportController
     public function __construct()
     {
         $this->adminer = $this->request->getAttribute('adminer', []);
-        $this->model = new ConfigModel();
+        // $this->model = new ConfigModel();
         parent::__construct();
     }
 }
