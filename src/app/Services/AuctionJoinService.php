@@ -112,10 +112,28 @@ class AuctionJoinService extends BaseSupportService
         return ArrayExpand::columns($list, 'auction_id', 'join_id');
     }
 
-    public function openJoin(){
+    public function openJoin($msgShow = false){
+        $msgShow = function (string $msg) use ($msgShow) {
+            if ($msgShow){
+                $msgShow($msg);
+            }
+        };
+        $msgShow('开始获取符合开奖条件的拍品');
         $allAuctions = AuctionService::instance()->getIsCanLotteryAuctions();
+        $msgShow('拍品数量：'.count($allAuctions));
         $allJoin = $this->getAllJoinByAuctionIds(array_keys($allAuctions));
-        foreach ($allJoin as $auctionId => $joins){
+
+        foreach ($allAuctions as $auctionId => $auction){
+
+            if (empty($allJoin[$auctionId])){
+                $msgShow('AuctionId='.$auctionId.'的拍品流拍');
+                AuctionService::instance()->unsold($auctionId);
+                continue;
+            }
+
+            $joins = $allJoin[$auctionId];
+
+
             // 获取拍品详情
             $auction = $allAuctions[$auctionId];
 
@@ -149,6 +167,8 @@ class AuctionJoinService extends BaseSupportService
             // 退还所有押金
             UserService::instance()->depositReturnInUserIds($allUserIds, $auctionId, $auctionMargin);
 
+            // 修改拍品状态
+            AuctionService::instance()->successAuction($auctionId);
 
         }
     }

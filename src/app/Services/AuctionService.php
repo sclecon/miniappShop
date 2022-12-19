@@ -146,11 +146,20 @@ class AuctionService extends BaseSupportService
         $painterId = array_unique(array_values(ArrayExpand::columnKey($list, 'auction_id', 'painter_id')));
         $painterNames = PainterService::instance()->getPainterNamesInId($painterId);
         $painterId = array_keys(ArrayExpand::columns($list, 'auction_id'));
-        $images = AuctionImageService::instance()->getAuctionImagesInAuctionId($painterId);
+        // $images = AuctionImageService::instance()->getAuctionImagesInAuctionId($painterId);
+        $images = [];
         foreach ($list as $key => $value){
-            $list[$key] = $this->format($value, $painterNames, $images, []);
+            // $list[$key] = $this->format($value, $painterNames, $images, []);
         }
         return ArrayExpand::column($list, 'auction_id');
+    }
+
+    public function successAuction(int $auctionId) : int {
+        return $this->getModel()->where('auction_id', $auctionId)->update(['status'=>2]);
+    }
+
+    public function unsold(int $auctionId) : int {
+        return $this->getModel()->where('auction_id', $auctionId)->update(['status'=>3]);
     }
 
     public function upgradeThisPrice(int $auctionId, $price) : int {
